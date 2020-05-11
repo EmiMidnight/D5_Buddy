@@ -6,7 +6,9 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -75,6 +77,9 @@ namespace D5_Buddy
         string LoadedFirstCarName = "";
         int LoadedFirstCarID = 0;
         int LoadedFirstCarColorID = 0;
+
+        // Load original card in mem, for saving later
+        public byte[] CardInMemory;
 
         public MainWindow()
         {
@@ -207,6 +212,10 @@ namespace D5_Buddy
 
                     // LOAD EVERYTHING INTO THE UI
                     LoadUIValues();
+
+                    fs.Seek(0x00, SeekOrigin.Begin);
+                    CardInMemory = binaryReader.ReadBytes((int)binaryReader.BaseStream.Length);
+                    SaveCard_Button.IsEnabled = true;
                 }
         }
 
@@ -223,7 +232,27 @@ namespace D5_Buddy
 
         private void SaveCard_Button_Click(object sender, RoutedEventArgs e)
         {
+            using (MemoryStream memoryStream = new MemoryStream(CardInMemory))
+            {
+                using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
+                {
+                    string newName = Name_TextBox.Text;
+                    byte[] newNameBytes = shiftJIS.GetBytes(newName);
+                    memoryStream.Seek(0xB4, SeekOrigin.Begin);
+                    // ADD IN CHECK FOR NAME LENGTH
+                    binaryWriter.Write(newNameBytes);
 
+                    Console.WriteLine("saving to binary");
+                }
+            }
+
+            File.WriteAllBytes("saved.card", CardInMemory);
+        }
+
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
         }
     }
 }

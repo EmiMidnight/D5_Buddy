@@ -24,13 +24,24 @@
         <Button x:Name="SaveCard_Button" Content="Save Card" HorizontalAlignment="Left" Margin="15,63,0,0" VerticalAlignment="Top" Width="108" Click="SaveCard_Button_Click" Height="24" IsEnabled="False"/>
         <TabControl x:Name="tabControl" Grid.Column="1" HorizontalAlignment="Left" Height="399" Margin="10,10,0,0" VerticalAlignment="Top" Width="634"  Style="{StaticResource MaterialDesignTabControl}">
             <TabItem Header="General">
-                <Grid>
-                    <Label x:Name="Name_Label" Content="Name:" Margin="10,10,511,316"/>
-                    <TextBox x:Name="Name_TextBox" Height="23" TextWrapping="Wrap" Margin="125,12,346,316" MaxLength="6"/>
-                    <Label x:Name="DPoint_Label" Content="DPoints:" Margin="10,41,511,285"/>
-                    <TextBox x:Name="DPoint_TextBox" Height="23" TextWrapping="Wrap" Margin="125,43,346,285" MaxLength="6"/>
-                    <Label x:Name="Rank_Label" Content="Rank:" Margin="10,72,511,253"/>
-                    <Label x:Name="Rank_Debug_Label" Content="D3" Margin="123,72,398,253"/>
+                <Grid Height="351" VerticalAlignment="Bottom">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="38*"/>
+                        <RowDefinition Height="38*"/>
+                        <RowDefinition Height="38*"/>
+                        <RowDefinition Height="235*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="141*"/>
+                        <ColumnDefinition Width="152*"/>
+                        <ColumnDefinition Width="341*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label x:Name="Name_Label" Content="Name:" Margin="10,9,0,9" RenderTransformOrigin="0.662,0.464" VerticalAlignment="Center" Height="24"/>
+                    <TextBox x:Name="Name_TextBox" TextWrapping="Wrap" Margin="10,0,0,0" MaxLength="6" Grid.Column="1" VerticalAlignment="Center" Height="24"/>
+                    <Label x:Name="DPoint_Label" Content="DPoints:" Grid.Row="1" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                    <TextBox x:Name="DPoint_TextBox" TextWrapping="Wrap" Margin="10,0,0,0" MaxLength="9" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Height="24" PreviewTextInput="NumberValidationTextBox"/>
+                    <Label x:Name="Rank_Label" Content="Rank:" Margin="10,0,0,0" Grid.Row="2" VerticalAlignment="Center"/>
+                    <Label x:Name="Rank_Debug_Label" Content="D3" Margin="10,0,0,0" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Garage">
