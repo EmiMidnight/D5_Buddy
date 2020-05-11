@@ -5,31 +5,40 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:D5_Buddy"
         mc:Ignorable="d"
-        Title="D5 Card Buddy" Height="450" Width="800" MinWidth="800" MinHeight="450" ResizeMode="CanMinimize">
+        Title="D5 Card Buddy" Height="450" Width="800" MinWidth="800" MinHeight="450" ResizeMode="CanMinimize"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:controls="clr-namespace:MaterialDesignExtensions.Controls;assembly=MaterialDesignExtensions"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal" 
+        TextOptions.TextRenderingMode="Auto"        
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="23*"/>
             <ColumnDefinition Width="109*"/>
         </Grid.ColumnDefinitions>
-        <Button x:Name="LoadCard_Button" Content="Load Card" HorizontalAlignment="Left" Margin="22,21,0,0" VerticalAlignment="Top" Width="94" Click="LoadCard_Button_Click" Height="20"/>
-        <Button x:Name="SaveCard_Button" Content="Save Card" HorizontalAlignment="Left" Margin="22,60,0,0" VerticalAlignment="Top" Width="94" Click="SaveCard_Button_Click" Height="20" IsEnabled="False"/>
-        <TabControl x:Name="tabControl" Grid.Column="1" HorizontalAlignment="Left" Height="399" Margin="10,10,0,0" VerticalAlignment="Top" Width="634">
+        <Button x:Name="LoadCard_Button" Content="Load Card" HorizontalAlignment="Left" Margin="15,24,0,0" VerticalAlignment="Top" Width="108" Click="LoadCard_Button_Click" Height="24"/>
+        <Button x:Name="SaveCard_Button" Content="Save Card" HorizontalAlignment="Left" Margin="15,63,0,0" VerticalAlignment="Top" Width="108" Click="SaveCard_Button_Click" Height="24" IsEnabled="False"/>
+        <TabControl x:Name="tabControl" Grid.Column="1" HorizontalAlignment="Left" Height="399" Margin="10,10,0,0" VerticalAlignment="Top" Width="634"  Style="{StaticResource MaterialDesignTabControl}">
             <TabItem Header="General">
                 <Grid>
-                    <Label x:Name="Name_Label" Content="Name:" Margin="10,10,511,332"/>
-                    <TextBox x:Name="Name_TextBox" Height="23" TextWrapping="Wrap" Margin="85,12,386,336" MaxLength="6"/>
-                    <Label x:Name="DPoint_Label" Content="DPoints:" Margin="10,41,511,301"/>
-                    <TextBox x:Name="DPoint_TextBox" Height="23" TextWrapping="Wrap" Margin="85,43,386,305" MaxLength="6"/>
-                    <Label x:Name="Rank_Label" Content="Rank:" Margin="10,72,511,270"/>
-                    <Label x:Name="Rank_Debug_Label" Content="D3" Margin="83,72,438,270"/>
+                    <Label x:Name="Name_Label" Content="Name:" Margin="10,10,511,316"/>
+                    <TextBox x:Name="Name_TextBox" Height="23" TextWrapping="Wrap" Margin="125,12,346,316" MaxLength="6"/>
+                    <Label x:Name="DPoint_Label" Content="DPoints:" Margin="10,41,511,285"/>
+                    <TextBox x:Name="DPoint_TextBox" Height="23" TextWrapping="Wrap" Margin="125,43,346,285" MaxLength="6"/>
+                    <Label x:Name="Rank_Label" Content="Rank:" Margin="10,72,511,253"/>
+                    <Label x:Name="Rank_Debug_Label" Content="D3" Margin="123,72,398,253"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Garage">
                 <Grid>
-                    <Label x:Name="Car1_Label" Content="Car 1" Margin="10,10,511,332" FontWeight="Bold" FontSize="16"/>
-                    <Label x:Name="FirstCarName_Label" Content="Car Name: " Margin="10,41,511,301"/>
-                    <Label x:Name="FirstCarName_Debug_Label" Content="" Margin="130,41,256,301"/>
-                    <Image x:Name="FirstCarIcon" Height="64" Width="128" Margin="490,10,10,297" Source="Resources/AE85L.png" IsEnabled="False"/>
+                    <Label x:Name="Car1_Label" Content="Car 1" Margin="10,10,511,315" FontWeight="Bold" FontSize="16"/>
+                    <Label x:Name="FirstCarName_Label" Content="Car Name: " Margin="10,41,511,286"/>
+                    <Label x:Name="FirstCarName_Debug_Label" Content="" Margin="130,41,256,286"/>
+                    <Image x:Name="FirstCarIcon" Width="128" Margin="493,10,13,275" Source="Resources/AE85L.png" IsEnabled="False"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Avatar">
