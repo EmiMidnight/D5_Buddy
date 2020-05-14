@@ -54,11 +54,13 @@ namespace D5_Buddy
             public int ColorID { get; set; }
             [JsonProperty("color_name")]
             public string ColorName { get; set; }
+            public int[] ColorRGB { get; set; }
 
-            public CarColor(int color_id, string color_name)
+            public CarColor(int color_id, string color_name, int[] color_rgb)
             {
                 ColorID = color_id;
                 ColorName = color_name;
+                ColorRGB= color_rgb;
             }
         }
 
@@ -77,6 +79,20 @@ namespace D5_Buddy
         string LoadedFirstCarName = "";
         int LoadedFirstCarID = 0;
         int LoadedFirstCarColorID = 0;
+        string LoadedFirstCarColorName = "";
+        Color LoadedFirstCarColorRGB = new Color();
+        int LoadedSelectedCar = 0;
+        List<String> CarsInGarage = new List<String>();
+        byte[] firstCarTuning = new byte[2];
+        byte[] secondCarTuning = new byte[2];
+        byte[] thirdCarTuning = new byte[2];
+
+
+        // ALL TUNING OPTIONS
+        // Full Tune (MT)
+        byte[] fullTuneMTBytes = new byte[] { 0xFF, 0xFF };
+        byte[] fullTuneATBytes = new byte[] { 0xFF, 0x7F };
+        byte[] lastTuneStepBytes = new byte[] { 0xFE, 0xFF };
 
         // Load original card in mem, for saving later
         public byte[] CardInMemory;
@@ -90,6 +106,7 @@ namespace D5_Buddy
                 CarJSON = tr.ReadToEnd();
             }
             AllCars = JsonConvert.DeserializeObject<ObservableCollection<CarDB>>(CarJSON);
+            Rank_ComboBox.ItemsSource = AllRanks;
         }
 
         private void LoadCard_Button_Click(object sender, RoutedEventArgs e)
@@ -104,6 +121,7 @@ namespace D5_Buddy
                     int selectedCar = binaryReader.ReadByte();
                     int amountOfCars = binaryReader.ReadByte();
 
+                    LoadedSelectedCar = selectedCar;
                     // DPOINTS
                     fs.Seek(0x84, SeekOrigin.Begin);
                     int dPoints = binaryReader.ReadInt32();
@@ -135,9 +153,6 @@ namespace D5_Buddy
                     string nameString = shiftJIS.GetString(nameBufferFiltered);
                     LoadedName = nameString;
 
-                    // Tune Example
-                    byte[] fullTuneExample = new byte[] { 0xFF, 0xFF };
-
                     // FIRST CAR
                     fs.Seek(0xC4, SeekOrigin.Begin);
                     byte[] firstCarIDBytes = binaryReader.ReadBytes(2);
@@ -150,15 +165,33 @@ namespace D5_Buddy
                     string firstCarName = firstCar.CarName;
                     string firstCarModel = firstCar.CarModel;
                     string firstCarColorName = new ObservableCollection<CarColor>(firstCarColors.Where(x => x.ColorID == firstCarColorID)).First().ColorName;
+                    LoadedFirstCarColorName = firstCarColorName;
+                    CarColor firstCarColor = new ObservableCollection<CarColor>(firstCarColors.Where(x => x.ColorID == firstCarColorID)).First();
+                    LoadedFirstCarColorRGB = Color.FromRgb(Convert.ToByte(firstCarColor.ColorRGB[0]), Convert.ToByte(firstCarColor.ColorRGB[1]), Convert.ToByte(firstCarColor.ColorRGB[2]));
+
 
                     fs.Seek(0xC8, SeekOrigin.Begin);
-                    byte[] firstCarTuning = binaryReader.ReadBytes(2);
-                    bool firstCarFullTune = false;
-                    if (firstCarTuning.SequenceEqual(fullTuneExample))
+                    firstCarTuning = binaryReader.ReadBytes(2);
+                    //bool firstCarFullTuneMT = false;
+                    if (firstCarTuning.SequenceEqual(fullTuneMTBytes))
                     {
-                        firstCarFullTune = true;
+                        FirstCarFullTuneMT.IsChecked = true;
                     }
 
+                    if (firstCarTuning.SequenceEqual(fullTuneATBytes))
+                    {
+                        FirstCarFullTuneAT.IsChecked = true;
+                    }
+
+                    if (firstCarTuning.SequenceEqual(lastTuneStepBytes))
+                    {
+                        //firstCarTuningString = "FullMT";
+                        FirstCarLastStepTune.IsChecked = true;
+                    }
+
+
+
+                    CarsInGarage.Add(firstCarName);
                     // SECOND CAR
                     bool secondCarFullTune = false;
                     byte[] secondCarTuning = new byte[2];
@@ -177,7 +210,7 @@ namespace D5_Buddy
                         fs.Seek(0x128, SeekOrigin.Begin);
                         secondCarTuning = binaryReader.ReadBytes(2);
 
-                        if (secondCarTuning.SequenceEqual(fullTuneExample))
+                        if (secondCarTuning.SequenceEqual(fullTuneMTBytes))
                         {
                             secondCarFullTune = true;
                         }
@@ -192,12 +225,17 @@ namespace D5_Buddy
                         secondCarColors = new ObservableCollection<CarColor>(secondCar.CarColors);
                         secondCarName = secondCar.CarName;
                         secondCarColorName = new ObservableCollection<CarColor>(secondCarColors.Where(x => x.ColorID == secondCarColorID)).First().ColorName;
+                        CarsInGarage.Add(secondCarName);
+
                     }
 
                     LoadedFirstCarName = firstCarName;
                     LoadedFirstCarModel = firstCarModel;
 
+                    
+
                     // DEBUG OUTPUT
+                    /*
                     Console.WriteLine("Player Name: " + nameString);
                     Console.WriteLine("D-Points: " + dPoints.ToString());
                     Console.WriteLine("Amount of cars: " + amountOfCars.ToString());
@@ -209,6 +247,7 @@ namespace D5_Buddy
                     Console.WriteLine("Second car name: " + secondCarName.ToString() + " | Color Name: " + secondCarColorName.ToString());
                     Console.WriteLine("First car has Full Tune: " + firstCarFullTune.ToString());
                     Console.WriteLine("Second car has Full Tune: " + secondCarFullTune.ToString());
+                    */
 
                     // LOAD EVERYTHING INTO THE UI
                     LoadUIValues();
@@ -223,36 +262,79 @@ namespace D5_Buddy
         {
             Name_TextBox.Text = LoadedName;
             DPoint_TextBox.Text = LoadedDPoints.ToString();
-            Rank_Debug_Label.Content = AllRanks[LoadedRank - 1];
+            Rank_ComboBox.SelectedIndex = LoadedRank - 1;
+            SelectedCar_ComboBox.ItemsSource = CarsInGarage;
+            SelectedCar_ComboBox.SelectedIndex = LoadedSelectedCar;
+            //Rank_Debug_Label.Content = AllRanks[LoadedRank - 1];
             FirstCarName_Debug_Label.Content = LoadedFirstCarName;
+            FirstCarColor_Debug_Label.Content = LoadedFirstCarColorName; // DEBUG
             Uri car1_icon_uri = new Uri("Resources/" + LoadedFirstCarModel + ".png", UriKind.Relative);
             ImageSource car1_icon_src = new BitmapImage(car1_icon_uri);
             FirstCarIcon.Source = car1_icon_src;
+
+            FirstCarColorBox.Fill = new SolidColorBrush(LoadedFirstCarColorRGB);
         }
 
         private void SaveCard_Button_Click(object sender, RoutedEventArgs e)
         {
-            using (MemoryStream memoryStream = new MemoryStream(CardInMemory))
+            try
             {
-                using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
+                using (MemoryStream memoryStream = new MemoryStream(CardInMemory))
                 {
-                    string newName = Name_TextBox.Text;
-                    byte[] newNameBytes = shiftJIS.GetBytes(newName);
-                    memoryStream.Seek(0xB4, SeekOrigin.Begin);
-                    // ADD IN CHECK FOR NAME LENGTH
-                    binaryWriter.Write(newNameBytes);
+                    using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
+                    {
+                        Console.WriteLine("saving to binary card data");
+                        // SAVE NEW NAME
+                        string newName = Name_TextBox.Text;
+                        byte[] newNameBytes = shiftJIS.GetBytes(newName);
+                        byte[] emptyName = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+                        memoryStream.Seek(0xB4, SeekOrigin.Begin);
+                        // Overwrite with empty first
+                        binaryWriter.Write(emptyName);
+                        memoryStream.Seek(0xB4, SeekOrigin.Begin);
+                        // ADD IN CHECK FOR NAME LENGTH
+                        binaryWriter.Write(newNameBytes);
 
-                    Console.WriteLine("saving to binary");
+                        // DPOINTS
+                        memoryStream.Seek(0x84, SeekOrigin.Begin);
+                        binaryWriter.Write(int.Parse(DPoint_TextBox.Text));
+
+                        // RANK
+                        memoryStream.Seek(0x67, SeekOrigin.Begin);
+                        int newRank = Rank_ComboBox.SelectedIndex + 1;
+                        binaryWriter.Write(newRank);
+
+                        // SELECTED CAR
+                        memoryStream.Seek(0x69, SeekOrigin.Begin);
+                        binaryWriter.Write(SelectedCar_ComboBox.SelectedIndex);
+
+
+                    }
                 }
+                //Console.WriteLine("card data saved");
+                File.WriteAllBytes("saved.card", CardInMemory);
+                ShowPopupNotification("Card has been saved.");
             }
-
-            File.WriteAllBytes("saved.card", CardInMemory);
+            catch
+            {
+                ShowPopupNotification("Card could not be saved.");
+            }
         }
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
+        }
+
+        public async void ShowPopupNotification(string messageText)
+        {
+            var dialogContent = new TextBlock
+            {
+                Text = messageText,
+                Margin = new Thickness(20)
+            };
+            await MaterialDesignThemes.Wpf.DialogHost.Show(dialogContent);
         }
     }
 }

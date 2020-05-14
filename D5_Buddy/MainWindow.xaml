@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:D5_Buddy"
         mc:Ignorable="d"
-        Title="D5 Card Buddy" Height="450" Width="800" MinWidth="800" MinHeight="450" ResizeMode="CanMinimize"
+        Title="D5 Card Buddy" Height="600" Width="800" MinWidth="800" MinHeight="599" ResizeMode="CanMinimize"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:controls="clr-namespace:MaterialDesignExtensions.Controls;assembly=MaterialDesignExtensions"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -15,49 +15,107 @@
         TextOptions.TextRenderingMode="Auto"        
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="23*"/>
-            <ColumnDefinition Width="109*"/>
-        </Grid.ColumnDefinitions>
-        <Button x:Name="LoadCard_Button" Content="Load Card" HorizontalAlignment="Left" Margin="15,24,0,0" VerticalAlignment="Top" Width="108" Click="LoadCard_Button_Click" Height="24"/>
-        <Button x:Name="SaveCard_Button" Content="Save Card" HorizontalAlignment="Left" Margin="15,63,0,0" VerticalAlignment="Top" Width="108" Click="SaveCard_Button_Click" Height="24" IsEnabled="False"/>
-        <TabControl x:Name="tabControl" Grid.Column="1" HorizontalAlignment="Left" Height="399" Margin="10,10,0,0" VerticalAlignment="Top" Width="634"  Style="{StaticResource MaterialDesignTabControl}">
-            <TabItem Header="General">
-                <Grid Height="351" VerticalAlignment="Bottom">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="38*"/>
-                        <RowDefinition Height="38*"/>
-                        <RowDefinition Height="38*"/>
-                        <RowDefinition Height="235*"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="141*"/>
-                        <ColumnDefinition Width="152*"/>
-                        <ColumnDefinition Width="341*"/>
-                    </Grid.ColumnDefinitions>
-                    <Label x:Name="Name_Label" Content="Name:" Margin="10,9,0,9" RenderTransformOrigin="0.662,0.464" VerticalAlignment="Center" Height="24"/>
-                    <TextBox x:Name="Name_TextBox" TextWrapping="Wrap" Margin="10,0,0,0" MaxLength="6" Grid.Column="1" VerticalAlignment="Center" Height="24"/>
-                    <Label x:Name="DPoint_Label" Content="DPoints:" Grid.Row="1" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                    <TextBox x:Name="DPoint_TextBox" TextWrapping="Wrap" Margin="10,0,0,0" MaxLength="9" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Height="24" PreviewTextInput="NumberValidationTextBox"/>
-                    <Label x:Name="Rank_Label" Content="Rank:" Margin="10,0,0,0" Grid.Row="2" VerticalAlignment="Center"/>
-                    <Label x:Name="Rank_Debug_Label" Content="D3" Margin="10,0,0,0" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center"/>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Garage">
-                <Grid>
-                    <Label x:Name="Car1_Label" Content="Car 1" Margin="10,10,511,315" FontWeight="Bold" FontSize="16"/>
-                    <Label x:Name="FirstCarName_Label" Content="Car Name: " Margin="10,41,511,286"/>
-                    <Label x:Name="FirstCarName_Debug_Label" Content="" Margin="130,41,256,286"/>
-                    <Image x:Name="FirstCarIcon" Width="128" Margin="493,10,13,275" Source="Resources/AE85L.png" IsEnabled="False"/>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Avatar">
-                <Grid>
+    <materialDesign:DialogHost CloseOnClickAway="True">
+        <Grid >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="23*"/>
+                <ColumnDefinition Width="109*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="LoadCard_Button" Content="Load Card" HorizontalAlignment="Left" Margin="15,24,0,0" VerticalAlignment="Top" Width="108" Click="LoadCard_Button_Click" Height="24"/>
+            <Button x:Name="SaveCard_Button" Content="Save Card" HorizontalAlignment="Left" Margin="15,63,0,0" VerticalAlignment="Top" Width="108" Click="SaveCard_Button_Click" Height="24" IsEnabled="False"/>
+            <TabControl x:Name="tabControl" Grid.Column="1" HorizontalAlignment="Left" Height="551" Margin="10,10,0,0" VerticalAlignment="Top" Width="634"  Style="{StaticResource MaterialDesignTabControl}">
+                <TabItem Header="General">
+                    <Grid Margin="0,2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="38"/>
+                            <RowDefinition Height="38"/>
+                            <RowDefinition Height="38"/>
+                            <RowDefinition Height="38"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="141*"/>
+                            <ColumnDefinition Width="152*"/>
+                            <ColumnDefinition Width="341*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label x:Name="Name_Label" Content="Name:" Margin="10,0,0,0" RenderTransformOrigin="0.662,0.464" VerticalAlignment="Center" Height="24"/>
+                        <TextBox x:Name="Name_TextBox" TextWrapping="Wrap" Margin="10,0,0,0" MaxLength="6" Grid.Column="1" VerticalAlignment="Center" Height="24"/>
+                        <Label x:Name="DPoint_Label" Content="DPoints:" Grid.Row="1" VerticalAlignment="Center" Margin="10,0,0,0" Height="24"/>
+                        <TextBox x:Name="DPoint_TextBox" TextWrapping="Wrap" Margin="10,0,0,0" MaxLength="9" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Height="24" PreviewTextInput="NumberValidationTextBox"/>
+                        <Label x:Name="Rank_Label" Content="Rank:" Margin="10,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="24"/>
+                        <ComboBox x:Name="Rank_ComboBox" HorizontalAlignment="Left" VerticalAlignment="Center" Width="142" Grid.Column="1" Grid.Row="2" Height="28" Margin="10,0,0,0"/>
+                        <Label x:Name="SelectedCar_Label" Content="Current Car:" Margin="10,0,0,0" Grid.Row="3" VerticalAlignment="Center" Height="24"/>
+                        <ComboBox x:Name="SelectedCar_ComboBox" HorizontalAlignment="Left" VerticalAlignment="Center" Width="142" Grid.Column="1" Grid.Row="3" Height="28" Margin="10,0,0,0"/>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Garage">
+                    <Grid Margin="0,2,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="38"/>
+                            <RowDefinition Height="38"/>
+                            <RowDefinition Height="38"/>
+                            <RowDefinition Height="38"/>
+                            <RowDefinition Height="38"/>
+                            <RowDefinition Height="38"/>
+                            <RowDefinition Height="38"/>
+                            <RowDefinition Height="38"/>
+                            <RowDefinition Height="38"/>
+                            <RowDefinition Height="38"/>
+                            <RowDefinition Height="38"/>
+                            <RowDefinition Height="38"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="141*"/>
+                            <ColumnDefinition Width="152*"/>
+                            <ColumnDefinition Width="75*"/>
+                            <ColumnDefinition Width="266*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label x:Name="Car1_Label" Content="Car 1" FontWeight="Bold" FontSize="16" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Margin="10,0,0,0" Height="26"/>
+                        <Label x:Name="FirstCarName_Label" Content="Car Name: " Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Margin="10,0,0,0" Height="24"/>
+                        <Label x:Name="FirstCarName_Debug_Label" Content="" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Margin="0" Height="24"/>
+                        <Label x:Name="FirstCarColor_Label" Content="Car Color: " Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Margin="10,0,0,0" Height="24"/>
+                        <Label x:Name="FirstCarColor_Debug_Label" Content="" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Margin="0" Height="24"/>
+                        <Image x:Name="FirstCarIcon" Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" Source="Resources/AE85L.png" IsEnabled="False" Margin="69,0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="128" Height="64"/>
+                        <Rectangle x:Name="FirstCarColorBox" Grid.Column="3" Fill="#FFF4F4F5" HorizontalAlignment="Center" Height="22" Grid.Row="2" Stroke="Black" VerticalAlignment="Center" Width="90" Margin="88,0" RadiusX="4" RadiusY="4"/>
+                        <RadioButton x:Name="FirstCarFullTuneMT" GroupName="Car1Tune" Content="Full Tune (MT)" HorizontalAlignment="Left" Margin="10,5,0,5" Grid.Row="3" VerticalAlignment="Center" Height="28" Width="121" Grid.Column="0"/>
+                        <RadioButton x:Name="FirstCarFullTuneAT" GroupName="Car1Tune" Content="Full Tune (AT)" HorizontalAlignment="Left" Margin="10,5,0,5" Grid.Row="3" VerticalAlignment="Center" Height="28" Width="111" Grid.Column="1"/>
+                        <RadioButton x:Name="FirstCarLastStepTune" GroupName="Car1Tune" Content="Last Step (Before Full)" HorizontalAlignment="Left" Margin="10,5,0,5" Grid.Row="3" VerticalAlignment="Center" Height="28" Width="160" Grid.Column="2" Grid.ColumnSpan="2"/>
+                        <RadioButton x:Name="FirstCarKeepTune" GroupName="Car1Tune" Content="Keep Current" IsChecked="True" HorizontalAlignment="Left" Margin="123,5,0,5" Grid.Row="3" VerticalAlignment="Center" Height="28" Width="111" Grid.Column="3"/>
 
-                </Grid>
-            </TabItem>
-        </TabControl>
+                        <Label x:Name="Car2_Label" Content="Car 2" FontWeight="Bold" FontSize="16" Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" Margin="10,0,0,0" Height="26"/>
+                        <Label x:Name="SecondCarName_Label" Content="Car Name: " Grid.Column="0" Grid.Row="5" VerticalAlignment="Center" Margin="10,0,0,0" Height="24"/>
+                        <Label x:Name="SecondCarName_Debug_Label" Content="" Grid.Column="1" Grid.Row="5" VerticalAlignment="Center" Margin="0" Height="24"/>
+                        <Label x:Name="SecondCarColor_Label" Content="Car Color: " Grid.Column="0" Grid.Row="6" VerticalAlignment="Center" Margin="10,0,0,0" Height="24"/>
+                        <Label x:Name="SecondCarColor_Debug_Label" Content="" Grid.Column="1" Grid.Row="6" VerticalAlignment="Center" Margin="0" Height="24"/>
+                        <Image x:Name="SecondCarIcon" Grid.Column="3" Grid.Row="4" Grid.RowSpan="2" Source="Resources/AE85L.png" IsEnabled="False" Margin="69,0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="128" Height="64"/>
+                        <Rectangle x:Name="SecondCarColorBox" Grid.Column="3" Fill="#FFF4F4F5" HorizontalAlignment="Center" Height="22" Grid.Row="6" Stroke="Black" VerticalAlignment="Center" Width="90" Margin="88,0" RadiusX="4" RadiusY="4"/>
+                        <RadioButton x:Name="SecondCarFullTuneMT" GroupName="Car2Tune" Content="Full Tune (MT)" HorizontalAlignment="Left" Margin="10,5,0,5" Grid.Row="7" VerticalAlignment="Center" Height="28" Width="121" Grid.Column="0"/>
+                        <RadioButton x:Name="SecondCarFullTuneAT" GroupName="Car2Tune" Content="Full Tune (AT)" HorizontalAlignment="Left" Margin="10,5,0,5" Grid.Row="7" VerticalAlignment="Center" Height="28" Width="111" Grid.Column="1"/>
+                        <RadioButton x:Name="SecondCarLastStepTune" GroupName="Car2Tune" Content="Last Step (Before Full)" HorizontalAlignment="Left" Margin="10,5,0,5" Grid.Row="7" VerticalAlignment="Center" Height="28" Width="160" Grid.Column="2" Grid.ColumnSpan="2"/>
+                        <RadioButton x:Name="SecondCarKeepTune" GroupName="Car2Tune" Content="Keep Current" IsChecked="True" HorizontalAlignment="Left" Margin="123,5,0,5" Grid.Row="7" VerticalAlignment="Center" Height="28" Width="111" Grid.Column="3"/>
 
-    </Grid>
+                        <Label x:Name="Car3_Label" Content="Car 3" FontWeight="Bold" FontSize="16" Grid.Column="0" Grid.Row="8" VerticalAlignment="Center" Margin="10,0,0,0" Height="26"/>
+                        <Label x:Name="ThirdCarName_Label" Content="Car Name: " Grid.Column="0" Grid.Row="9" VerticalAlignment="Center" Margin="10,0,0,0" Height="24"/>
+                        <Label x:Name="ThirdCarName_Debug_Label" Content="" Grid.Column="1" Grid.Row="9" VerticalAlignment="Center" Margin="0" Height="24"/>
+                        <Label x:Name="ThirdCarColor_Label" Content="Car Color: " Grid.Column="0" Grid.Row="10" VerticalAlignment="Center" Margin="10,0,0,0" Height="24"/>
+                        <Label x:Name="ThirdCarColor_Debug_Label" Content="" Grid.Column="1" Grid.Row="10" VerticalAlignment="Center" Margin="0" Height="24"/>
+                        <Image x:Name="ThirdCarIcon" Grid.Column="3" Grid.Row="8" Grid.RowSpan="2" Source="Resources/AE85L.png" IsEnabled="False" Margin="69,0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="128" Height="64"/>
+                        <Rectangle x:Name="ThirdCarColorBox" Grid.Column="3" Fill="#FFF4F4F5" HorizontalAlignment="Center" Height="22" Grid.Row="10" Stroke="Black" VerticalAlignment="Center" Width="90" Margin="88,0" RadiusX="4" RadiusY="4"/>
+                        <RadioButton x:Name="ThirdCarFullTuneMT" GroupName="Car3Tune" Content="Full Tune (MT)" HorizontalAlignment="Left" Margin="10,5,0,5" Grid.Row="11" VerticalAlignment="Center" Height="28" Width="121" Grid.Column="0"/>
+                        <RadioButton x:Name="ThirdCarFullTuneAT" GroupName="Car3Tune" Content="Full Tune (AT)" HorizontalAlignment="Left" Margin="10,5,0,5" Grid.Row="11" VerticalAlignment="Center" Height="28" Width="111" Grid.Column="1"/>
+                        <RadioButton x:Name="ThirdCarLastStepTune" GroupName="Car3Tune" Content="Last Step (Before Full)" HorizontalAlignment="Left" Margin="10,5,0,5" Grid.Row="11" VerticalAlignment="Center" Height="28" Width="160" Grid.Column="2" Grid.ColumnSpan="2"/>
+                        <RadioButton x:Name="ThirdCarKeepTune" GroupName="Car3Tune" Content="Keep Current" IsChecked="True" HorizontalAlignment="Left" Margin="123,5,0,5" Grid.Row="11" VerticalAlignment="Center" Height="28" Width="111" Grid.Column="3"/>
+                    </Grid>
+
+                </TabItem>
+                <TabItem Header="Avatar">
+                    <Grid>
+                        <Label x:Name="label" Content="Coming Soon" HorizontalAlignment="Center" Margin="0,2,0,0" VerticalAlignment="Center" FontWeight="Bold" FontSize="48"/>
+
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </Grid>
+    </materialDesign:DialogHost>
 </Window>
