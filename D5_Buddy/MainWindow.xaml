@@ -73,7 +73,8 @@
                         </Grid.ColumnDefinitions>
                         <Label x:Name="Car1_Label" Content="Car 1" FontWeight="Bold" FontSize="16" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Margin="10,0,0,0" Height="26"/>
                         <Label x:Name="FirstCarName_Label" Content="Car Name: " Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Margin="10,0,0,0" Height="24"/>
-                        <Label x:Name="FirstCarName_Debug_Label" Content="" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Margin="0" Height="24"/>
+                        <ComboBox x:Name="FirstCarModel_Combobox" HorizontalAlignment="Left" VerticalAlignment="Center" Width="227" Grid.Column="1" Grid.Row="1" Tag="first" Grid.ColumnSpan="2" Height="28" Margin="0,5" SelectedValuePath="CarID" DisplayMemberPath="CarName" SelectionChanged="Car_SelectionChanged"/>
+                        <!--<Label x:Name="FirstCarName_Debug_Label" Content="" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Margin="0" Height="24"/> -->
                         <Label x:Name="FirstCarColor_Label" Content="Car Color: " Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Margin="10,0,0,0" Height="24"/>
                         <Label x:Name="FirstCarColor_Debug_Label" Content="" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Margin="0" Height="24"/>
                         <Image x:Name="FirstCarIcon" Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" Source="Resources/AE85L.png" IsEnabled="False" Margin="69,0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="128" Height="64"/>
@@ -85,7 +86,7 @@
 
                         <Label x:Name="Car2_Label" Content="Car 2" FontWeight="Bold" FontSize="16" Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" Margin="10,0,0,0" Height="26"/>
                         <Label x:Name="SecondCarName_Label" Content="Car Name: " Grid.Column="0" Grid.Row="5" VerticalAlignment="Center" Margin="10,0,0,0" Height="24"/>
-                        <Label x:Name="SecondCarName_Debug_Label" Content="" Grid.Column="1" Grid.Row="5" VerticalAlignment="Center" Margin="0" Height="24"/>
+                        <ComboBox x:Name="SecondCarModel_Combobox" HorizontalAlignment="Left" VerticalAlignment="Center" Width="227" Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="2" Tag="second" Height="28" Margin="0,5" SelectedValuePath="CarID" DisplayMemberPath="CarName" SelectionChanged="Car_SelectionChanged"/>
                         <Label x:Name="SecondCarColor_Label" Content="Car Color: " Grid.Column="0" Grid.Row="6" VerticalAlignment="Center" Margin="10,0,0,0" Height="24"/>
                         <Label x:Name="SecondCarColor_Debug_Label" Content="" Grid.Column="1" Grid.Row="6" VerticalAlignment="Center" Margin="0" Height="24"/>
                         <Image x:Name="SecondCarIcon" Grid.Column="3" Grid.Row="4" Grid.RowSpan="2" Source="Resources/AE85L.png" IsEnabled="False" Margin="69,0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="128" Height="64"/>

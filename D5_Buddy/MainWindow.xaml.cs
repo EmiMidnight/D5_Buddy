@@ -75,12 +75,21 @@ namespace D5_Buddy
         int LoadedDPoints = 0;
         string LoadedGender = "Male";
         int LoadedRank = 0;
+
         string LoadedFirstCarModel = "";
         string LoadedFirstCarName = "";
         int LoadedFirstCarID = 0;
         int LoadedFirstCarColorID = 0;
         string LoadedFirstCarColorName = "";
         Color LoadedFirstCarColorRGB = new Color();
+
+        string LoadedSecondCarModel = "";
+        string LoadedSecondCarName = "";
+        int LoadedSecondCarID = 0;
+        int LoadedSecondCarColorID = 0;
+        string LoadedSecondCarColorName = "";
+        Color LoadedSecondCarColorRGB = new Color();
+
         int LoadedSelectedCar = 0;
         List<String> CarsInGarage = new List<String>();
         byte[] firstCarTuning = new byte[2];
@@ -189,8 +198,6 @@ namespace D5_Buddy
                         FirstCarLastStepTune.IsChecked = true;
                     }
 
-
-
                     CarsInGarage.Add(firstCarName);
                     // SECOND CAR
                     bool secondCarFullTune = false;
@@ -203,6 +210,7 @@ namespace D5_Buddy
                     CarDB secondCar = new ObservableCollection<CarDB>(AllCars.Where(x => x.CarID == secondCarID)).First();
                     ObservableCollection<CarColor> secondCarColors = new ObservableCollection<CarColor>();
                     string secondCarName = "";
+                    string secondCarModel = "";
                     string secondCarColorName = "";
 
                     if (amountOfCars > 1)
@@ -224,6 +232,7 @@ namespace D5_Buddy
                         secondCar = new ObservableCollection<CarDB>(AllCars.Where(x => x.CarID == secondCarID)).First();
                         secondCarColors = new ObservableCollection<CarColor>(secondCar.CarColors);
                         secondCarName = secondCar.CarName;
+                        secondCarModel = secondCar.CarModel;
                         secondCarColorName = new ObservableCollection<CarColor>(secondCarColors.Where(x => x.ColorID == secondCarColorID)).First().ColorName;
                         CarsInGarage.Add(secondCarName);
 
@@ -231,8 +240,12 @@ namespace D5_Buddy
 
                     LoadedFirstCarName = firstCarName;
                     LoadedFirstCarModel = firstCarModel;
+                    LoadedFirstCarID = firstCarID;
 
-                    
+                    LoadedSecondCarName = secondCarName;
+                    LoadedSecondCarModel = secondCarModel;
+                    LoadedSecondCarID = secondCarID;
+
 
                     // DEBUG OUTPUT
                     /*
@@ -265,8 +278,15 @@ namespace D5_Buddy
             Rank_ComboBox.SelectedIndex = LoadedRank - 1;
             SelectedCar_ComboBox.ItemsSource = CarsInGarage;
             SelectedCar_ComboBox.SelectedIndex = LoadedSelectedCar;
+
+            FirstCarModel_Combobox.ItemsSource = AllCars;
+            FirstCarModel_Combobox.SelectedValue = LoadedFirstCarID;
+
+            SecondCarModel_Combobox.ItemsSource = AllCars;
+            SecondCarModel_Combobox.SelectedValue = LoadedSecondCarID;
+
             //Rank_Debug_Label.Content = AllRanks[LoadedRank - 1];
-            FirstCarName_Debug_Label.Content = LoadedFirstCarName;
+            //FirstCarName_Debug_Label.Content = LoadedFirstCarName;
             FirstCarColor_Debug_Label.Content = LoadedFirstCarColorName; // DEBUG
             Uri car1_icon_uri = new Uri("Resources/" + LoadedFirstCarModel + ".png", UriKind.Relative);
             ImageSource car1_icon_src = new BitmapImage(car1_icon_uri);
@@ -335,6 +355,27 @@ namespace D5_Buddy
                 Margin = new Thickness(20)
             };
             await MaterialDesignThemes.Wpf.DialogHost.Show(dialogContent);
+        }
+
+        private void Car_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string whichCarSlot = ((ComboBox)sender).Tag.ToString();
+            int CarIndex = int.Parse((sender as ComboBox).SelectedValue.ToString());
+            CarDB Car = new ObservableCollection<CarDB>(AllCars.Where(x => x.CarID == CarIndex)).First();
+            Uri car_icon_uri = new Uri("Resources/" + Car.CarModel + ".png", UriKind.Relative);
+            ImageSource car_icon_src = new BitmapImage(car_icon_uri);
+            switch (whichCarSlot)
+            {
+                case "first":
+                    FirstCarIcon.Source = car_icon_src;
+                    break;
+                case "second":
+                    SecondCarIcon.Source = car_icon_src;
+                    break;
+                default:
+                    Console.WriteLine("Illegal car selection. Eh?");
+                    break;
+            }
         }
     }
 }
