@@ -27,6 +27,10 @@ namespace D5_Buddy
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        /// <summary>
+        /// CarDB entry format, storing a cars ID, name, model etc
+        /// </summary>
         public class CarDB
         {
             [JsonProperty("car_id")]
@@ -37,9 +41,9 @@ namespace D5_Buddy
             public string CarModel { get; set; }
 
             [JsonProperty("colors")]
-            public CarColor[] CarColors { get; set; }
+            public ObservableCollection<CarColor> CarColors { get; set; }
 
-            public CarDB(int car_id, string car_name, string car_model, CarColor[] colors)
+            public CarDB(int car_id, string car_name, string car_model, ObservableCollection<CarColor> colors)
             {
                 CarID = car_id;
                 CarName = car_name;
@@ -47,7 +51,9 @@ namespace D5_Buddy
                 CarColors = colors;
             }
         }
-
+        /// <summary>
+        /// This handles parsing the Car Colors from the JSON database. 
+        /// </summary>
         public class CarColor
         {  
             [JsonProperty("color_id")]
@@ -62,7 +68,41 @@ namespace D5_Buddy
                 ColorName = color_name;
                 ColorRGB= color_rgb;
             }
+            public Color ToColor()
+            {
+                return Color.FromRgb(Convert.ToByte(ColorRGB[0]), Convert.ToByte(ColorRGB[1]), Convert.ToByte(ColorRGB[2]));
+            }
         }
+        /// <summary>
+        /// A Car. More specifically, a copy of the players car, containing all the infos needed to make changes and or fill the UI.
+        /// </summary>
+        public class Car
+        {
+            public CarDB CarObject { get; set; }
+            public int ID { get; set; }
+            public string Model { get; set; }
+            public string Name { get; set; }
+            public int SelectedColor { get; set; }
+            public ObservableCollection<CarColor> Colors { get; set; }
+            public byte[] Tuning { get; set; }
+
+            public Car(CarDB carobject, int id, string model, string name, int colorid, ObservableCollection<CarColor> colors, byte[] tuning)
+            {
+                CarObject = carobject;
+                ID = id;
+                Model = model;
+                Name = name;
+                SelectedColor = colorid;
+                Colors = colors;
+                Tuning = tuning;
+            }
+
+            public Car()
+            {
+
+            }
+        }
+
 
         Encoding shiftJIS = Encoding.GetEncoding("shift-jis");
         string CarJSONPath = "D5_Buddy.Resources.cars.json";
@@ -76,6 +116,7 @@ namespace D5_Buddy
         string LoadedGender = "Male";
         int LoadedRank = 0;
 
+        #region Debug Variables
         string LoadedFirstCarModel = "";
         string LoadedFirstCarName = "";
         int LoadedFirstCarID = 0;
@@ -91,11 +132,17 @@ namespace D5_Buddy
         Color LoadedSecondCarColorRGB = new Color();
 
         int LoadedSelectedCar = 0;
-        List<String> CarsInGarage = new List<String>();
+        #endregion
+
         byte[] firstCarTuning = new byte[2];
         byte[] secondCarTuning = new byte[2];
         byte[] thirdCarTuning = new byte[2];
 
+        List<String> CarsInGarage = new List<String>();
+        // Set up all 3 empty car slots
+        Car FirstCar = new Car();
+        Car SecondCar = new Car();
+        Car ThirdCar = new Car();
 
         // ALL TUNING OPTIONS
         // Full Tune (MT)
@@ -105,6 +152,8 @@ namespace D5_Buddy
 
         // Load original card in mem, for saving later
         public byte[] CardInMemory;
+
+        public bool RefreshBlocked = false;
 
         public MainWindow()
         {
@@ -169,15 +218,27 @@ namespace D5_Buddy
                     byte[] firstCarColorBytes = binaryReader.ReadBytes(2);
                     short firstCarColorID = BitConverter.ToInt16(firstCarColorBytes, 0);
 
-                    CarDB firstCar = new ObservableCollection<CarDB>(AllCars.Where(x => x.CarID == firstCarID)).First();
-                    ObservableCollection<CarColor> firstCarColors = new ObservableCollection<CarColor>(firstCar.CarColors);
-                    string firstCarName = firstCar.CarName;
-                    string firstCarModel = firstCar.CarModel;
-                    string firstCarColorName = new ObservableCollection<CarColor>(firstCarColors.Where(x => x.ColorID == firstCarColorID)).First().ColorName;
-                    LoadedFirstCarColorName = firstCarColorName;
-                    CarColor firstCarColor = new ObservableCollection<CarColor>(firstCarColors.Where(x => x.ColorID == firstCarColorID)).First();
-                    LoadedFirstCarColorRGB = Color.FromRgb(Convert.ToByte(firstCarColor.ColorRGB[0]), Convert.ToByte(firstCarColor.ColorRGB[1]), Convert.ToByte(firstCarColor.ColorRGB[2]));
+                    FirstCar.SelectedColor = firstCarColorID;
 
+                    CarDB firstCar = new ObservableCollection<CarDB>(AllCars.Where(x => x.CarID == firstCarID)).First();
+                    ObservableCollection<CarColor> firstCarColors = firstCar.CarColors;
+                    FirstCar.Colors = firstCarColors;
+                    string firstCarName = firstCar.CarName;
+
+                    // TESTING NEW CAR CLASS HERE
+                    FirstCar.Name = firstCar.CarName;
+                    FirstCar.Model = firstCar.CarModel;
+
+                    string firstCarModel = firstCar.CarModel;
+
+                    //CarColor firstCarColor = new ObservableCollection<CarColor>(firstCarColors.Where(x => x.ColorID == firstCarColorID)).First();
+                    CarColor firstCarColor = firstCar.CarColors[5];
+                    //LoadedFirstCarColorRGB = Color.FromRgb(Convert.ToByte(firstCarColor.ColorRGB[0]), Convert.ToByte(firstCarColor.ColorRGB[1]), Convert.ToByte(firstCarColor.ColorRGB[2]));
+                    LoadedFirstCarColorRGB = firstCarColor.ToColor();
+                    Console.WriteLine("From Car object: " + FirstCar.Name);
+                    //string firstCarColorName = new ObservableCollection<CarColor>(firstCarColors.Where(x => x.ColorID == firstCarColorID)).First().ColorName;
+                    string firstCarColorName = firstCarColor.ColorName;
+                    LoadedFirstCarColorName = firstCarColorName;
 
                     fs.Seek(0xC8, SeekOrigin.Begin);
                     firstCarTuning = binaryReader.ReadBytes(2);
@@ -273,6 +334,7 @@ namespace D5_Buddy
 
         private void LoadUIValues()
         {
+            // Set up General Page
             Name_TextBox.Text = LoadedName;
             DPoint_TextBox.Text = LoadedDPoints.ToString();
             Rank_ComboBox.SelectedIndex = LoadedRank - 1;
@@ -282,15 +344,19 @@ namespace D5_Buddy
             FirstCarModel_Combobox.ItemsSource = AllCars;
             FirstCarModel_Combobox.SelectedValue = LoadedFirstCarID;
 
+            FirstCarColor_Combobox.ItemsSource = FirstCar.Colors;
+            FirstCarColor_Combobox.SelectedValue = FirstCar.SelectedColor;
+
             SecondCarModel_Combobox.ItemsSource = AllCars;
             SecondCarModel_Combobox.SelectedValue = LoadedSecondCarID;
 
             //Rank_Debug_Label.Content = AllRanks[LoadedRank - 1];
             //FirstCarName_Debug_Label.Content = LoadedFirstCarName;
-            FirstCarColor_Debug_Label.Content = LoadedFirstCarColorName; // DEBUG
+           /* FirstCarColor_Debug_Label.Content = LoadedFirstCarColorName; // DEBUG
             Uri car1_icon_uri = new Uri("Resources/" + LoadedFirstCarModel + ".png", UriKind.Relative);
             ImageSource car1_icon_src = new BitmapImage(car1_icon_uri);
             FirstCarIcon.Source = car1_icon_src;
+            */
 
             FirstCarColorBox.Fill = new SolidColorBrush(LoadedFirstCarColorRGB);
         }
@@ -368,6 +434,17 @@ namespace D5_Buddy
             {
                 case "first":
                     FirstCarIcon.Source = car_icon_src;
+                    FirstCar.ID = Car.CarID;
+                    FirstCar.Name = Car.CarName;
+                    FirstCar.Model = Car.CarModel;
+                    FirstCar.Colors = Car.CarColors;
+                    Console.WriteLine(FirstCar.Colors[2].ColorName + " That's color 2 babe");
+                    RefreshBlocked = true;
+                    FirstCarColor_Combobox.ItemsSource = null;
+                    RefreshBlocked = false;
+                    FirstCarColor_Combobox.ItemsSource = FirstCar.Colors;
+                    FirstCarColor_Combobox.SelectedIndex = 0;
+
                     break;
                 case "second":
                     SecondCarIcon.Source = car_icon_src;
@@ -377,5 +454,36 @@ namespace D5_Buddy
                     break;
             }
         }
+
+        private void Color_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!RefreshBlocked)
+            {
+                string whichColorSlot = ((ComboBox)sender).Tag.ToString();
+                int ColorIndex = int.Parse((sender as ComboBox).SelectedValue.ToString());
+                FirstCar.SelectedColor = ColorIndex;
+                /*CarDB Car = new ObservableCollection<CarDB>(AllCars.Where(x => x.CarID == CarIndex)).First();
+                Uri car_icon_uri = new Uri("Resources/" + Car.CarModel + ".png", UriKind.Relative);
+                ImageSource car_icon_src = new BitmapImage(car_icon_uri);*/
+                switch (whichColorSlot)
+                {
+                    case "first":
+                        Console.WriteLine("Color First slot");
+                        FirstCarColorBox.Fill = new SolidColorBrush(FirstCar.Colors[FirstCar.SelectedColor].ToColor());
+                        break;
+                    case "second":
+                        Console.WriteLine("Color Second Slot");
+                        break;
+                    default:
+                        Console.WriteLine("Illegal car selection. Eh?");
+                        break;
+                }
+            }
+        }
+
+        /*private Color ConvertRGBToColor(CarColor NewColor)
+        {
+            return Color.FromRgb(Convert.ToByte(NewColor.ColorRGB[0]), Convert.ToByte(NewColor.ColorRGB[1]), Convert.ToByte(NewColor.ColorRGB[2]));
+        }*/
     }
 }
