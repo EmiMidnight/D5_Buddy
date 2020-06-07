@@ -1,7 +1,7 @@
 ﻿D5 Buddy
 A Arcade Stage 5 Card Editor
 By PockyWitch
-Version 0.5 BETA
+Version 0.5 Hotfix1 BETA
 
 Features:
 - Change Name, Rank, DPoints.
@@ -10,14 +10,19 @@ Features:
 Coming Soon (TM):
 - Avatar Editing
 
+Changelog 0.5 Hotfix:
+- Fix Selected Car List filling up when repeatedly loading cards
+- Automatically convert names to fullwidth text to keep original game spacing
+- Filter open card dialogue to .crd files
+- Automatically clear visual tuning parts to avoid bugs (only when actually changing car, and when "Keep Visual Tuning" isn't checked)
+
 How to use:
 Click the load card button, then point at the InidCrd000.crd in your d5 directory. Make a backup first in case anything goes wrong though!
 Just change whatever you want to change, then click save and boot up the game.
 
 Notes:
 This is a beta, for real this time. I mean it. 
-There's a chance that, changing the car in a slot can break if the original car you are replacing has a lot of visual tuning parts installed.
-I haven't been able to test it very much, and the small tests I did were working but I do get a bad feeling about how this works so,
-if you do have a car with a ton of visual mods and the card editor works fine for you (after changing the car to another one)
-Please let me know so my soul can rest happily.
 
+Please make sure to read the warning when checking "Keep Visual Parts". 
+
+Big thanks to M2rtra and Alexvgz for helping test the first beta release.

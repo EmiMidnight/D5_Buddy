@@ -31,6 +31,8 @@
                             <RowDefinition Height="38"/>
                             <RowDefinition Height="38"/>
                             <RowDefinition Height="38"/>
+                            <RowDefinition Height="38"/>
+                            <RowDefinition Height="38"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
@@ -46,6 +48,7 @@
                         <ComboBox x:Name="Rank_ComboBox" HorizontalAlignment="Left" VerticalAlignment="Center" Width="190" Grid.Column="1" Grid.Row="2" Height="28" Margin="10,5,0,5"/>
                         <Label x:Name="SelectedCar_Label" Content="Current Car:" Margin="10,7,0,7" Grid.Row="3" VerticalAlignment="Center" Height="24"/>
                         <ComboBox x:Name="SelectedCar_ComboBox" HorizontalAlignment="Left" VerticalAlignment="Center" Width="190" Grid.Column="1" Grid.Row="3" Height="28" Margin="10,5,0,5" SelectionChanged="SelectedCarChanged"/>
+                        <CheckBox x:Name="KeepVisuals_CheckBox" Content="Keep Visual Tuning When Changing Cars" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="4" VerticalAlignment="Top" Width="341" Grid.ColumnSpan="2" Checked="VisualTuneWarning"/>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Garage">

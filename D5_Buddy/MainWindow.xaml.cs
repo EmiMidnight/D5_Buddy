@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -81,16 +82,18 @@ namespace D5_Buddy
             public CarDB CarObject { get; set; }
             public short ID { get; set; }
             public string Model { get; set; }
+            public string OriginalModel { get; set; }
             public string Name { get; set; }
             public short SelectedColor { get; set; }
             public ObservableCollection<CarColor> Colors { get; set; }
             public byte[] Tuning { get; set; }
             public byte[] NewTuning { get; set; }
-            public Car(CarDB carobject, short id, string model, string name, short colorid, ObservableCollection<CarColor> colors, byte[] tuning, byte[] newTuning)
+            public Car(CarDB carobject, short id, string model, string originalModel, string name, short colorid, ObservableCollection<CarColor> colors, byte[] tuning, byte[] newTuning)
             {
                 CarObject = carobject;
                 ID = id;
                 Model = model;
+                OriginalModel = originalModel;
                 Name = name;
                 SelectedColor = colorid;
                 Colors = colors;
@@ -140,6 +143,16 @@ namespace D5_Buddy
         public bool SelectedCarRefreshBlocked = false;
         public bool CardLoading = false;
 
+        public bool KeepVisualTune = false;
+        public byte[] EmptyVisualTuningBytes = {
+            0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF,
+            0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF,
+            0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF,
+            0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF,
+            0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF,
+            0x00, 0xFF, 0x00, 0xFF
+        };
+
 
         public MainWindow()
         {
@@ -155,167 +168,186 @@ namespace D5_Buddy
 
         private void LoadCard_Button_Click(object sender, RoutedEventArgs e)
         {
+            UnloadCard();
+
             CardLoading = true;
             OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "D5 Card Files (*.crd)|*.crd|All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
                 using (FileStream fs = File.OpenRead(openFileDialog.FileName))
                 using (BinaryReader binaryReader = new BinaryReader(fs))
                 {
                     CardPath = openFileDialog.FileName;
-                    // CAR AMOUNT, SELECTED CAR
-                    fs.Seek(0x69, SeekOrigin.Begin);
-                    int selectedCar = binaryReader.ReadByte();
-                    int amountOfCars = binaryReader.ReadByte();
 
-                    LoadedSelectedCar = selectedCar;
-                    // DPOINTS
-                    fs.Seek(0x84, SeekOrigin.Begin);
-                    int dPoints = binaryReader.ReadInt32();
-                    LoadedDPoints = dPoints;
-
-                    // RANK
-                    fs.Seek(0x67, SeekOrigin.Begin);
-                    LoadedRank = binaryReader.ReadByte();
-
-                    // NAME READING AND FILTERING
-                    fs.Seek(0xB4, SeekOrigin.Begin);
-                    byte[] nameBuf = binaryReader.ReadBytes(12);
-                    List<byte> nameList = new List<byte>();
-                    for (int i = 0; i <= nameBuf.Length - 1; i++)
+                    fs.Seek(0x14, SeekOrigin.Begin);
+                    int gameVersion = BitConverter.ToInt16(binaryReader.ReadBytes(2), 0);
+                    if (gameVersion == 21008)
                     {
 
-                        if (nameBuf[i] != 0)
+                        // CAR AMOUNT, SELECTED CAR
+                        fs.Seek(0x69, SeekOrigin.Begin);
+                        int selectedCar = binaryReader.ReadByte();
+                        int amountOfCars = binaryReader.ReadByte();
+
+                        LoadedSelectedCar = selectedCar;
+                        // DPOINTS
+                        fs.Seek(0x84, SeekOrigin.Begin);
+                        int dPoints = binaryReader.ReadInt32();
+                        LoadedDPoints = dPoints;
+
+                        // RANK
+                        fs.Seek(0x67, SeekOrigin.Begin);
+                        LoadedRank = binaryReader.ReadByte();
+
+                        // NAME READING AND FILTERING
+                        fs.Seek(0xB4, SeekOrigin.Begin);
+                        byte[] nameBuf = binaryReader.ReadBytes(12);
+                        List<byte> nameList = new List<byte>();
+                        for (int i = 0; i <= nameBuf.Length - 1; i++)
                         {
 
-                            nameList.Add(nameBuf[i]);
+                            if (nameBuf[i] != 0)
+                            {
+
+                                nameList.Add(nameBuf[i]);
+                            }
+                            else
+                            {
+
+                                break;
+                            }
                         }
-                        else
-                        {
+                        byte[] nameBufferFiltered = nameList.ToArray();
+                        string nameString = shiftJIS.GetString(nameBufferFiltered);
+                        LoadedName = nameString;
 
-                            break;
-                        }
-                    }
-                    byte[] nameBufferFiltered = nameList.ToArray();
-                    string nameString = shiftJIS.GetString(nameBufferFiltered);
-                    LoadedName = nameString;
+                        ////////////////////////
+                        //// LOAD FIRST CAR
+                        ////////////////////////
 
-                    ////////////////////////
-                    //// LOAD FIRST CAR
-                    ////////////////////////
-                    
-                    // Seek to start of Car 1 data
-                    fs.Seek(0xC4, SeekOrigin.Begin);
-
-                    // Load ID and Color
-                    FirstCar.ID = BitConverter.ToInt16(binaryReader.ReadBytes(2), 0);
-                    FirstCar.SelectedColor = BitConverter.ToInt16(binaryReader.ReadBytes(2), 0);
-
-                    // Load data from the CarDB via the CarID
-                    LoadCarFromID(ref FirstCar);
-
-                    // Seek forward to Car 1 Tuning
-                    fs.Seek(0xC8, SeekOrigin.Begin);
-                    FirstCar.Tuning = binaryReader.ReadBytes(2);
-                    FirstCar.NewTuning = FirstCar.Tuning;
-                    if (FirstCar.Tuning.SequenceEqual(fullTuneMTBytes))
-                    {
-                        FirstCarFullTuneMT.IsChecked = true;
-                    }
-
-                    if (FirstCar.Tuning.SequenceEqual(fullTuneATBytes))
-                    {
-                        FirstCarFullTuneAT.IsChecked = true;
-                    }
-
-                    if (FirstCar.Tuning.SequenceEqual(lastTuneStepBytes))
-                    {
-                        FirstCarLastStepTune.IsChecked = true;
-                    }
-
-                    CarsInGarage.Add(FirstCar.Name);
-
-                    ////////////////////////
-                    //// LOAD SECOND CAR
-                    ////////////////////////
-                    
-                    if (amountOfCars > 1)
-                    {
-                        // Seek to start of Car 2 data
-                        fs.Seek(0x124, SeekOrigin.Begin);
+                        // Seek to start of Car 1 data
+                        fs.Seek(0xC4, SeekOrigin.Begin);
 
                         // Load ID and Color
-                        SecondCar.ID = BitConverter.ToInt16(binaryReader.ReadBytes(2), 0);
-                        SecondCar.SelectedColor = BitConverter.ToInt16(binaryReader.ReadBytes(2), 0);
+                        FirstCar.ID = BitConverter.ToInt16(binaryReader.ReadBytes(2), 0);
+                        FirstCar.SelectedColor = BitConverter.ToInt16(binaryReader.ReadBytes(2), 0);
 
                         // Load data from the CarDB via the CarID
-                        LoadCarFromID(ref SecondCar);
+                        LoadCarFromID(ref FirstCar);
+                        FirstCar.OriginalModel = FirstCar.Model;
 
-                        // Seek forward to Car 2 Tuning
-                        fs.Seek(0x128, SeekOrigin.Begin);
-                        SecondCar.Tuning = binaryReader.ReadBytes(2);
-                        SecondCar.NewTuning = SecondCar.Tuning;
-                        if (SecondCar.Tuning.SequenceEqual(fullTuneMTBytes))
+                        // Seek forward to Car 1 Tuning
+                        fs.Seek(0xC8, SeekOrigin.Begin);
+                        FirstCar.Tuning = binaryReader.ReadBytes(2);
+                        FirstCar.NewTuning = FirstCar.Tuning;
+                        if (FirstCar.Tuning.SequenceEqual(fullTuneMTBytes))
                         {
-                            SecondCarFullTuneMT.IsChecked = true;
+                            FirstCarFullTuneMT.IsChecked = true;
                         }
 
-                        if (SecondCar.Tuning.SequenceEqual(fullTuneATBytes))
+                        if (FirstCar.Tuning.SequenceEqual(fullTuneATBytes))
                         {
-                            SecondCarFullTuneAT.IsChecked = true;
+                            FirstCarFullTuneAT.IsChecked = true;
                         }
 
-                        if (SecondCar.Tuning.SequenceEqual(lastTuneStepBytes))
+                        if (FirstCar.Tuning.SequenceEqual(lastTuneStepBytes))
                         {
-                            SecondCarLastStepTune.IsChecked = true;
+                            FirstCarLastStepTune.IsChecked = true;
                         }
 
-                        CarsInGarage.Add(SecondCar.Name);
+                        CarsInGarage.Add(FirstCar.Name);
+
+                        ////////////////////////
+                        //// LOAD SECOND CAR
+                        ////////////////////////
+
+                        if (amountOfCars > 1)
+                        {
+                            // Seek to start of Car 2 data
+                            fs.Seek(0x124, SeekOrigin.Begin);
+
+                            // Load ID and Color
+                            SecondCar.ID = BitConverter.ToInt16(binaryReader.ReadBytes(2), 0);
+                            SecondCar.SelectedColor = BitConverter.ToInt16(binaryReader.ReadBytes(2), 0);
+
+                            // Load data from the CarDB via the CarID
+                            LoadCarFromID(ref SecondCar);
+                            SecondCar.OriginalModel = SecondCar.Model;
+
+                            // Seek forward to Car 2 Tuning
+                            fs.Seek(0x128, SeekOrigin.Begin);
+                            SecondCar.Tuning = binaryReader.ReadBytes(2);
+                            SecondCar.NewTuning = SecondCar.Tuning;
+                            if (SecondCar.Tuning.SequenceEqual(fullTuneMTBytes))
+                            {
+                                SecondCarFullTuneMT.IsChecked = true;
+                            }
+
+                            if (SecondCar.Tuning.SequenceEqual(fullTuneATBytes))
+                            {
+                                SecondCarFullTuneAT.IsChecked = true;
+                            }
+
+                            if (SecondCar.Tuning.SequenceEqual(lastTuneStepBytes))
+                            {
+                                SecondCarLastStepTune.IsChecked = true;
+                            }
+
+                            CarsInGarage.Add(SecondCar.Name);
+                        }
+
+                        ////////////////////////
+                        //// LOAD THIRD CAR
+                        ////////////////////////
+
+                        if (amountOfCars > 2)
+                        {
+                            // Seek to start of Car 2 data
+                            fs.Seek(0x184, SeekOrigin.Begin);
+
+                            // Load ID and Color
+                            ThirdCar.ID = BitConverter.ToInt16(binaryReader.ReadBytes(2), 0);
+                            ThirdCar.SelectedColor = BitConverter.ToInt16(binaryReader.ReadBytes(2), 0);
+
+                            // Load data from the CarDB via the CarID
+                            LoadCarFromID(ref ThirdCar);
+                            ThirdCar.OriginalModel = ThirdCar.Model;
+
+                            // Seek forward to Car 3 Tuning
+                            fs.Seek(0x188, SeekOrigin.Begin);
+                            ThirdCar.Tuning = binaryReader.ReadBytes(2);
+                            ThirdCar.NewTuning = ThirdCar.Tuning;
+                            if (ThirdCar.Tuning.SequenceEqual(fullTuneMTBytes))
+                            {
+                                ThirdCarFullTuneMT.IsChecked = true;
+                            }
+
+                            if (ThirdCar.Tuning.SequenceEqual(fullTuneATBytes))
+                            {
+                                ThirdCarFullTuneAT.IsChecked = true;
+                            }
+
+                            if (ThirdCar.Tuning.SequenceEqual(lastTuneStepBytes))
+                            {
+                                ThirdCarLastStepTune.IsChecked = true;
+                            }
+
+                            CarsInGarage.Add(ThirdCar.Name);
+                        }
+
+                        // LOAD EVERYTHING INTO THE UI
+                        LoadUIValues();
+
+                        fs.Seek(0x00, SeekOrigin.Begin);
+                        CardInMemory = binaryReader.ReadBytes((int)binaryReader.BaseStream.Length);
+                        SaveCard_Button.IsEnabled = true;
                     }
-
-                    ////////////////////////
-                    //// LOAD THIRD CAR
-                    ////////////////////////
-
-                    if (amountOfCars > 2)
+                    else
                     {
-                        // Seek to start of Car 2 data
-                        fs.Seek(0x184, SeekOrigin.Begin);
-
-                        // Load ID and Color
-                        ThirdCar.ID = BitConverter.ToInt16(binaryReader.ReadBytes(2), 0);
-                        ThirdCar.SelectedColor = BitConverter.ToInt16(binaryReader.ReadBytes(2), 0);
-
-                        // Load data from the CarDB via the CarID
-                        LoadCarFromID(ref ThirdCar);
-
-                        // Seek forward to Car 3 Tuning
-                        fs.Seek(0x188, SeekOrigin.Begin);
-                        ThirdCar.Tuning = binaryReader.ReadBytes(2);
-                        ThirdCar.NewTuning = ThirdCar.Tuning;
-                        if (ThirdCar.Tuning.SequenceEqual(fullTuneMTBytes))
-                        {
-                            ThirdCarFullTuneMT.IsChecked = true;
-                        }
-
-                        if (ThirdCar.Tuning.SequenceEqual(fullTuneATBytes))
-                        {
-                            ThirdCarFullTuneAT.IsChecked = true;
-                        }
-
-                        if (ThirdCar.Tuning.SequenceEqual(lastTuneStepBytes))
-                        {
-                            ThirdCarLastStepTune.IsChecked = true;
-                        }
-
-                        CarsInGarage.Add(ThirdCar.Name);
+                        UnloadCard();
+                        ShowPopupNotification("Not a valid D5 Card. Loading cancelled.");
+                        LoadUIValues();
                     }
-
-                    // LOAD EVERYTHING INTO THE UI
-                    LoadUIValues();
-
-                    fs.Seek(0x00, SeekOrigin.Begin);
-                    CardInMemory = binaryReader.ReadBytes((int)binaryReader.BaseStream.Length);
-                    SaveCard_Button.IsEnabled = true;
                 }
         }
 
@@ -375,8 +407,9 @@ namespace D5_Buddy
                     using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
                     {
                         Console.WriteLine("saving to binary card data");
+                        KeepVisualTune = (bool)KeepVisuals_CheckBox.IsChecked;
                         // SAVE NEW NAME
-                        string newName = Name_TextBox.Text;
+                        string newName = ToFullWidth(Name_TextBox.Text);
                         byte[] newNameBytes = shiftJIS.GetBytes(newName);
                         byte[] emptyName = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
                         memoryStream.Seek(0xB4, SeekOrigin.Begin);
@@ -413,6 +446,13 @@ namespace D5_Buddy
                         // Save Tuning
                         binaryWriter.Write(FirstCar.NewTuning);
 
+                        // Clean Visual Tuning Parts
+                        if(!KeepVisualTune && FirstCar.OriginalModel != FirstCar.Model)
+                        {
+                            memoryStream.Seek(0xE4, SeekOrigin.Begin);
+                            binaryWriter.Write(EmptyVisualTuningBytes);
+                        }
+
                         if (SecondCar.Model != "")
                         {
                             ////////////////////////
@@ -428,6 +468,14 @@ namespace D5_Buddy
 
                             // Save Tuning
                             binaryWriter.Write(SecondCar.NewTuning);
+
+                            // Clean Visual Tuning Parts
+                            if (!KeepVisualTune && SecondCar.OriginalModel != SecondCar.Model)
+                            {
+                                memoryStream.Seek(0x144, SeekOrigin.Begin);
+                                binaryWriter.Write(EmptyVisualTuningBytes);
+                            }
+
                         }
 
                         if (ThirdCar.Model != "")
@@ -445,6 +493,13 @@ namespace D5_Buddy
 
                             // Save Tuning
                             binaryWriter.Write(ThirdCar.NewTuning);
+
+                            // Clean Visual Tuning Parts
+                            if (!KeepVisualTune && ThirdCar.OriginalModel != ThirdCar.Model)
+                            {
+                                memoryStream.Seek(0x1A4, SeekOrigin.Begin);
+                                binaryWriter.Write(EmptyVisualTuningBytes);
+                            }
                         }
 
                     }
@@ -733,5 +788,44 @@ namespace D5_Buddy
                 }
             }
         }
+
+        private void UnloadCard()
+        {
+            FirstCar = new Car();
+            SecondCar = new Car();
+            ThirdCar = new Car();
+            LoadedSelectedCar = 0;
+
+            LoadedName = "";
+            LoadedDPoints = 0;
+            LoadedGender = "Male";
+            LoadedRank = 0;
+
+            CarsInGarage.Clear();
+            CardInMemory = new byte[2];
+        }
+
+        private void VisualTuneWarning(object sender, RoutedEventArgs e)
+        {
+            if(((CheckBox)sender).IsChecked == true)
+            {
+                ShowPopupNotification("Warning: \n" +
+                    "This will keep visual tuning parts \n" +
+                    "when replacing a car with the editor. \n" +
+                    "This could (maybe) lead to crashes. \n" +
+                    "Don't complain when this breaks! \nYou were warned! :)");
+            }
+        }
+
+        private const uint LCMAP_FULLWIDTH = 0x00800000;
+        private const uint LOCALE_SYSTEM_DEFAULT = 0x0800;
+        public static string ToFullWidth(string halfWidth)
+        {
+            StringBuilder sb = new StringBuilder(256);
+            LCMapString(LOCALE_SYSTEM_DEFAULT, LCMAP_FULLWIDTH, halfWidth, -1, sb, sb.Capacity);
+            return sb.ToString();
+        }
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
+        private static extern int LCMapString(uint Locale, uint dwMapFlags, string lpSrcStr, int cchSrc, StringBuilder lpDestStr, int cchDest);
     }
 }
