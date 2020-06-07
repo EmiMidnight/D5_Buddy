@@ -55,7 +55,7 @@ namespace D5_Buddy
         /// This handles parsing the Car Colors from the JSON database. 
         /// </summary>
         public class CarColor
-        {  
+        {
             [JsonProperty("color_id")]
             public int ColorID { get; set; }
             [JsonProperty("color_name")]
@@ -66,7 +66,7 @@ namespace D5_Buddy
             {
                 ColorID = color_id;
                 ColorName = color_name;
-                ColorRGB= color_rgb;
+                ColorRGB = color_rgb;
             }
             public Color ToColor()
             {
@@ -99,8 +99,9 @@ namespace D5_Buddy
 
             public Car()
             {
-
+                Model = "";
             }
+
         }
 
 
@@ -154,6 +155,7 @@ namespace D5_Buddy
         public byte[] CardInMemory;
 
         public bool RefreshBlocked = false;
+        public bool CardLoading = false;
 
         public MainWindow()
         {
@@ -169,6 +171,7 @@ namespace D5_Buddy
 
         private void LoadCard_Button_Click(object sender, RoutedEventArgs e)
         {
+            CardLoading = true;
             OpenFileDialog openFileDialog = new OpenFileDialog();
             if (openFileDialog.ShowDialog() == true)
                 using (FileStream fs = File.OpenRead(openFileDialog.FileName))
@@ -211,56 +214,44 @@ namespace D5_Buddy
                     string nameString = shiftJIS.GetString(nameBufferFiltered);
                     LoadedName = nameString;
 
-                    // FIRST CAR
+                    ////////////////////////
+                    //// LOAD FIRST CAR
+                    ////////////////////////
+                    
+                    // Seek to start of Car 1 data
                     fs.Seek(0xC4, SeekOrigin.Begin);
-                    byte[] firstCarIDBytes = binaryReader.ReadBytes(2);
-                    short firstCarID = BitConverter.ToInt16(firstCarIDBytes, 0);
-                    byte[] firstCarColorBytes = binaryReader.ReadBytes(2);
-                    short firstCarColorID = BitConverter.ToInt16(firstCarColorBytes, 0);
 
-                    FirstCar.SelectedColor = firstCarColorID;
+                    // Load ID and Color
+                    FirstCar.ID = BitConverter.ToInt16(binaryReader.ReadBytes(2), 0);
+                    FirstCar.SelectedColor = BitConverter.ToInt16(binaryReader.ReadBytes(2), 0);
 
-                    CarDB firstCar = new ObservableCollection<CarDB>(AllCars.Where(x => x.CarID == firstCarID)).First();
-                    ObservableCollection<CarColor> firstCarColors = firstCar.CarColors;
-                    FirstCar.Colors = firstCarColors;
-                    string firstCarName = firstCar.CarName;
+                    // Load data from the CarDB via the CarID
+                    LoadCarFromID(ref FirstCar);
 
-                    // TESTING NEW CAR CLASS HERE
-                    FirstCar.Name = firstCar.CarName;
-                    FirstCar.Model = firstCar.CarModel;
-
-                    string firstCarModel = firstCar.CarModel;
-
-                    //CarColor firstCarColor = new ObservableCollection<CarColor>(firstCarColors.Where(x => x.ColorID == firstCarColorID)).First();
-                    CarColor firstCarColor = firstCar.CarColors[5];
-                    //LoadedFirstCarColorRGB = Color.FromRgb(Convert.ToByte(firstCarColor.ColorRGB[0]), Convert.ToByte(firstCarColor.ColorRGB[1]), Convert.ToByte(firstCarColor.ColorRGB[2]));
-                    LoadedFirstCarColorRGB = firstCarColor.ToColor();
-                    Console.WriteLine("From Car object: " + FirstCar.Name);
-                    //string firstCarColorName = new ObservableCollection<CarColor>(firstCarColors.Where(x => x.ColorID == firstCarColorID)).First().ColorName;
-                    string firstCarColorName = firstCarColor.ColorName;
-                    LoadedFirstCarColorName = firstCarColorName;
-
+                    // Seek forward to Car 1 Tuning
                     fs.Seek(0xC8, SeekOrigin.Begin);
-                    firstCarTuning = binaryReader.ReadBytes(2);
-                    //bool firstCarFullTuneMT = false;
-                    if (firstCarTuning.SequenceEqual(fullTuneMTBytes))
+                    FirstCar.Tuning = binaryReader.ReadBytes(2);
+                    if (FirstCar.Tuning.SequenceEqual(fullTuneMTBytes))
                     {
                         FirstCarFullTuneMT.IsChecked = true;
                     }
 
-                    if (firstCarTuning.SequenceEqual(fullTuneATBytes))
+                    if (FirstCar.Tuning.SequenceEqual(fullTuneATBytes))
                     {
                         FirstCarFullTuneAT.IsChecked = true;
                     }
 
-                    if (firstCarTuning.SequenceEqual(lastTuneStepBytes))
+                    if (FirstCar.Tuning.SequenceEqual(lastTuneStepBytes))
                     {
-                        //firstCarTuningString = "FullMT";
                         FirstCarLastStepTune.IsChecked = true;
                     }
 
-                    CarsInGarage.Add(firstCarName);
-                    // SECOND CAR
+                    CarsInGarage.Add(FirstCar.Name);
+
+                    ////////////////////////
+                    //// LOAD SECOND CAR
+                    ////////////////////////
+                    
                     bool secondCarFullTune = false;
                     byte[] secondCarTuning = new byte[2];
 
@@ -294,34 +285,19 @@ namespace D5_Buddy
                         secondCarColors = new ObservableCollection<CarColor>(secondCar.CarColors);
                         secondCarName = secondCar.CarName;
                         secondCarModel = secondCar.CarModel;
+                        SecondCar.Model = secondCar.CarModel;
                         secondCarColorName = new ObservableCollection<CarColor>(secondCarColors.Where(x => x.ColorID == secondCarColorID)).First().ColorName;
                         CarsInGarage.Add(secondCarName);
 
                     }
 
-                    LoadedFirstCarName = firstCarName;
-                    LoadedFirstCarModel = firstCarModel;
-                    LoadedFirstCarID = firstCarID;
+                    //LoadedFirstCarName = firstCarName;
+                    //LoadedFirstCarModel = firstCarModel;
+                    //LoadedFirstCarID = firstCarID;
 
                     LoadedSecondCarName = secondCarName;
                     LoadedSecondCarModel = secondCarModel;
                     LoadedSecondCarID = secondCarID;
-
-
-                    // DEBUG OUTPUT
-                    /*
-                    Console.WriteLine("Player Name: " + nameString);
-                    Console.WriteLine("D-Points: " + dPoints.ToString());
-                    Console.WriteLine("Amount of cars: " + amountOfCars.ToString());
-                    int selectedCarConverted = selectedCar += 1;
-                    Console.WriteLine("Selected car: " + selectedCarConverted.ToString());
-                    Console.WriteLine("First car ID: " + firstCarID.ToString() + " | Color ID: " + firstCarColorID.ToString());
-                    Console.WriteLine("First car name: " + firstCarName.ToString() + " | Color Name: " + firstCarColorName.ToString());
-                    Console.WriteLine("Second car ID: " + secondCarID.ToString() + " | Color ID: " + secondCarColorID.ToString());
-                    Console.WriteLine("Second car name: " + secondCarName.ToString() + " | Color Name: " + secondCarColorName.ToString());
-                    Console.WriteLine("First car has Full Tune: " + firstCarFullTune.ToString());
-                    Console.WriteLine("Second car has Full Tune: " + secondCarFullTune.ToString());
-                    */
 
                     // LOAD EVERYTHING INTO THE UI
                     LoadUIValues();
@@ -334,31 +310,42 @@ namespace D5_Buddy
 
         private void LoadUIValues()
         {
+            HideAllSlots();
             // Set up General Page
             Name_TextBox.Text = LoadedName;
             DPoint_TextBox.Text = LoadedDPoints.ToString();
             Rank_ComboBox.SelectedIndex = LoadedRank - 1;
             SelectedCar_ComboBox.ItemsSource = CarsInGarage;
             SelectedCar_ComboBox.SelectedIndex = LoadedSelectedCar;
+            
 
-            FirstCarModel_Combobox.ItemsSource = AllCars;
-            FirstCarModel_Combobox.SelectedValue = LoadedFirstCarID;
+            if (FirstCar.Model != "")
+            {
+                FirstCarModel_Combobox.ItemsSource = AllCars;
+                FirstCarModel_Combobox.SelectedValue = FirstCar.ID;
 
-            FirstCarColor_Combobox.ItemsSource = FirstCar.Colors;
-            FirstCarColor_Combobox.SelectedValue = FirstCar.SelectedColor;
+                FirstCarColor_Combobox.ItemsSource = FirstCar.Colors;
+                FirstCarColor_Combobox.SelectedValue = FirstCar.SelectedColor;
+                UnhideSlot(1);
+            }
 
-            SecondCarModel_Combobox.ItemsSource = AllCars;
-            SecondCarModel_Combobox.SelectedValue = LoadedSecondCarID;
+            if (SecondCar.Model != "")
+            {
+                SecondCarModel_Combobox.ItemsSource = AllCars;
+                SecondCarModel_Combobox.SelectedValue = LoadedSecondCarID;
+                UnhideSlot(2);
+            }
 
-            //Rank_Debug_Label.Content = AllRanks[LoadedRank - 1];
-            //FirstCarName_Debug_Label.Content = LoadedFirstCarName;
-           /* FirstCarColor_Debug_Label.Content = LoadedFirstCarColorName; // DEBUG
-            Uri car1_icon_uri = new Uri("Resources/" + LoadedFirstCarModel + ".png", UriKind.Relative);
-            ImageSource car1_icon_src = new BitmapImage(car1_icon_uri);
-            FirstCarIcon.Source = car1_icon_src;
-            */
+            Console.WriteLine("Third model is: " + ThirdCar.Model);
+            if (ThirdCar.Model != "")
+            {
+                //SecondCarModel_Combobox.ItemsSource = AllCars;
+                //SecondCarModel_Combobox.SelectedValue = LoadedSecondCarID;
+                UnhideSlot(3);
+            }
 
-            FirstCarColorBox.Fill = new SolidColorBrush(LoadedFirstCarColorRGB);
+            CardLoading = false;
+            //FirstCarColorBox.Fill = new SolidColorBrush(LoadedFirstCarColorRGB);
         }
 
         private void SaveCard_Button_Click(object sender, RoutedEventArgs e)
@@ -443,8 +430,10 @@ namespace D5_Buddy
                     FirstCarColor_Combobox.ItemsSource = null;
                     RefreshBlocked = false;
                     FirstCarColor_Combobox.ItemsSource = FirstCar.Colors;
-                    FirstCarColor_Combobox.SelectedIndex = 0;
-
+                    if(!CardLoading)
+                    {
+                        FirstCarColor_Combobox.SelectedIndex = 0;
+                    }
                     break;
                 case "second":
                     SecondCarIcon.Source = car_icon_src;
@@ -462,13 +451,10 @@ namespace D5_Buddy
                 string whichColorSlot = ((ComboBox)sender).Tag.ToString();
                 int ColorIndex = int.Parse((sender as ComboBox).SelectedValue.ToString());
                 FirstCar.SelectedColor = ColorIndex;
-                /*CarDB Car = new ObservableCollection<CarDB>(AllCars.Where(x => x.CarID == CarIndex)).First();
-                Uri car_icon_uri = new Uri("Resources/" + Car.CarModel + ".png", UriKind.Relative);
-                ImageSource car_icon_src = new BitmapImage(car_icon_uri);*/
                 switch (whichColorSlot)
                 {
                     case "first":
-                        Console.WriteLine("Color First slot");
+                        Console.WriteLine("Painting Color for First slot");
                         FirstCarColorBox.Fill = new SolidColorBrush(FirstCar.Colors[FirstCar.SelectedColor].ToColor());
                         break;
                     case "second":
@@ -481,9 +467,102 @@ namespace D5_Buddy
             }
         }
 
-        /*private Color ConvertRGBToColor(CarColor NewColor)
+        private void HideAllSlots()
         {
-            return Color.FromRgb(Convert.ToByte(NewColor.ColorRGB[0]), Convert.ToByte(NewColor.ColorRGB[1]), Convert.ToByte(NewColor.ColorRGB[2]));
-        }*/
+            Car1_Label.Visibility = Visibility.Hidden;
+            FirstCarName_Label.Visibility = Visibility.Hidden;
+            FirstCarModel_Combobox.Visibility = Visibility.Hidden;
+            FirstCarColor_Label.Visibility = Visibility.Hidden;
+            FirstCarColor_Combobox.Visibility = Visibility.Hidden;
+            FirstCarIcon.Visibility = Visibility.Hidden;
+            FirstCarColorBox.Visibility = Visibility.Hidden;
+            FirstCarFullTuneMT.Visibility = Visibility.Hidden;
+            FirstCarFullTuneAT.Visibility = Visibility.Hidden;
+            FirstCarLastStepTune.Visibility = Visibility.Hidden;
+            FirstCarKeepTune.Visibility = Visibility.Hidden;
+
+            Car2_Label.Visibility = Visibility.Hidden;
+            SecondCarName_Label.Visibility = Visibility.Hidden;
+            SecondCarModel_Combobox.Visibility = Visibility.Hidden;
+            SecondCarColor_Label.Visibility = Visibility.Hidden;
+            //SecondCarColor_Combobox.Visibility = Visibility.Hidden;
+            SecondCarIcon.Visibility = Visibility.Hidden;
+            SecondCarColorBox.Visibility = Visibility.Hidden;
+            SecondCarFullTuneMT.Visibility = Visibility.Hidden;
+            SecondCarFullTuneAT.Visibility = Visibility.Hidden;
+            SecondCarLastStepTune.Visibility = Visibility.Hidden;
+            SecondCarKeepTune.Visibility = Visibility.Hidden;
+
+            Car3_Label.Visibility = Visibility.Hidden;
+            ThirdCarName_Label.Visibility = Visibility.Hidden;
+            //ThirdCarModel_Combobox.Visibility = Visibility.Hidden;
+            ThirdCarColor_Label.Visibility = Visibility.Hidden;
+            //ThirdCarColor_Combobox.Visibility = Visibility.Hidden;
+            ThirdCarIcon.Visibility = Visibility.Hidden;
+            ThirdCarColorBox.Visibility = Visibility.Hidden;
+            ThirdCarFullTuneMT.Visibility = Visibility.Hidden;
+            ThirdCarFullTuneAT.Visibility = Visibility.Hidden;
+            ThirdCarLastStepTune.Visibility = Visibility.Hidden;
+            ThirdCarKeepTune.Visibility = Visibility.Hidden;
+        }
+
+        private void UnhideSlot(int slot)
+        {
+            switch(slot)
+            {
+                case 1:
+                    Car1_Label.Visibility = Visibility.Visible;
+                    FirstCarName_Label.Visibility = Visibility.Visible;
+                    FirstCarModel_Combobox.Visibility = Visibility.Visible;
+                    FirstCarColor_Label.Visibility = Visibility.Visible;
+                    FirstCarColor_Combobox.Visibility = Visibility.Visible;
+                    FirstCarIcon.Visibility = Visibility.Visible;
+                    FirstCarColorBox.Visibility = Visibility.Visible;
+                    FirstCarFullTuneMT.Visibility = Visibility.Visible;
+                    FirstCarFullTuneAT.Visibility = Visibility.Visible;
+                    FirstCarLastStepTune.Visibility = Visibility.Visible;
+                    FirstCarKeepTune.Visibility = Visibility.Visible;
+                    break;
+
+                case 2:
+                    Car2_Label.Visibility = Visibility.Visible;
+                    SecondCarName_Label.Visibility = Visibility.Visible;
+                    SecondCarModel_Combobox.Visibility = Visibility.Visible;
+                    SecondCarColor_Label.Visibility = Visibility.Visible;
+                    //SecondCarColor_Combobox.Visibility = Visibility.Visible;
+                    SecondCarIcon.Visibility = Visibility.Visible;
+                    SecondCarColorBox.Visibility = Visibility.Visible;
+                    SecondCarFullTuneMT.Visibility = Visibility.Visible;
+                    SecondCarFullTuneAT.Visibility = Visibility.Visible;
+                    SecondCarLastStepTune.Visibility = Visibility.Visible;
+                    SecondCarKeepTune.Visibility = Visibility.Visible;
+                    break;
+
+                case 3:
+                    Car3_Label.Visibility = Visibility.Visible;
+                    ThirdCarName_Label.Visibility = Visibility.Visible;
+                    //ThirdCarModel_Combobox.Visibility = Visibility.Visible;
+                    ThirdCarColor_Label.Visibility = Visibility.Visible;
+                    //ThirdCarColor_Combobox.Visibility = Visibility.Visible;
+                    ThirdCarIcon.Visibility = Visibility.Visible;
+                    ThirdCarColorBox.Visibility = Visibility.Visible;
+                    ThirdCarFullTuneMT.Visibility = Visibility.Visible;
+                    ThirdCarFullTuneAT.Visibility = Visibility.Visible;
+                    ThirdCarLastStepTune.Visibility = Visibility.Visible;
+                    ThirdCarKeepTune.Visibility = Visibility.Visible;
+                    break;
+            }
+
+        }
+
+        private void LoadCarFromID(ref Car CarVariable)
+        {
+            int CarID = CarVariable.ID;
+            CarVariable.CarObject = new ObservableCollection<CarDB>(AllCars.Where(x => x.CarID == CarID)).First();
+            CarVariable.Model = CarVariable.CarObject.CarModel;
+            CarVariable.Name = CarVariable.CarObject.CarName;
+            CarVariable.Colors = CarVariable.CarObject.CarColors;
+        }
+
     }
 }

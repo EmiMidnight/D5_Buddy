@@ -74,10 +74,8 @@
                         <Label x:Name="Car1_Label" Content="Car 1" FontWeight="Bold" FontSize="16" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Margin="10,0,0,0" Height="26"/>
                         <Label x:Name="FirstCarName_Label" Content="Car: " Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Margin="10,0,0,0" Height="24"/>
                         <ComboBox x:Name="FirstCarModel_Combobox" HorizontalAlignment="Left" VerticalAlignment="Center" Width="227" Grid.Column="1" Grid.Row="1" Tag="first" Grid.ColumnSpan="2" Height="28" Margin="0,5" SelectedValuePath="CarID" DisplayMemberPath="CarName" SelectionChanged="Car_SelectionChanged"/>
-                        <!--<Label x:Name="FirstCarName_Debug_Label" Content="" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Margin="0" Height="24"/> -->
                         <Label x:Name="FirstCarColor_Label" Content="Car Color: " Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Margin="10,0,0,0" Height="24"/>
                         <ComboBox x:Name="FirstCarColor_Combobox" HorizontalAlignment="Left" VerticalAlignment="Center" Width="227" Grid.Column="1" Grid.Row="2" Tag="first" Grid.ColumnSpan="2" Height="28" Margin="0,5" SelectedValuePath="ColorID" DisplayMemberPath="ColorName" SelectionChanged="Color_SelectionChanged"/>
-                        <!--<Label x:Name="FirstCarColor_Debug_Label" Content="" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Margin="0" Height="24"/> -->
                         <Image x:Name="FirstCarIcon" Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" Source="Resources/AE85L.png" IsEnabled="False" Margin="69,0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="128" Height="64"/>
                         <Rectangle x:Name="FirstCarColorBox" Grid.Column="3" Fill="#FFF4F4F5" HorizontalAlignment="Center" Height="22" Grid.Row="2" Stroke="Black" VerticalAlignment="Center" Width="90" Margin="88,0" RadiusX="4" RadiusY="4"/>
                         <RadioButton x:Name="FirstCarFullTuneMT" GroupName="Car1Tune" Content="Full Tune (MT)" HorizontalAlignment="Left" Margin="10,5,0,5" Grid.Row="3" VerticalAlignment="Center" Height="28" Width="121" Grid.Column="0"/>
@@ -108,12 +106,14 @@
                         <RadioButton x:Name="ThirdCarFullTuneAT" GroupName="Car3Tune" Content="Full Tune (AT)" HorizontalAlignment="Left" Margin="10,5,0,5" Grid.Row="11" VerticalAlignment="Center" Height="28" Width="111" Grid.Column="1"/>
                         <RadioButton x:Name="ThirdCarLastStepTune" GroupName="Car3Tune" Content="Last Step (Before Full)" HorizontalAlignment="Left" Margin="10,5,0,5" Grid.Row="11" VerticalAlignment="Center" Height="28" Width="160" Grid.Column="2" Grid.ColumnSpan="2"/>
                         <RadioButton x:Name="ThirdCarKeepTune" GroupName="Car3Tune" Content="Keep Current" IsChecked="True" HorizontalAlignment="Left" Margin="123,5,0,5" Grid.Row="11" VerticalAlignment="Center" Height="28" Width="111" Grid.Column="3"/>
+
                     </Grid>
 
                 </TabItem>
                 <TabItem Header="Avatar">
                     <Grid>
                         <Label x:Name="label" Content="Coming Soon" HorizontalAlignment="Center" Margin="0,2,0,0" VerticalAlignment="Center" FontWeight="Bold" FontSize="48"/>
+                        <Label x:Name="coming_tm" Content="™" HorizontalAlignment="Center" Margin="472,220,116,241" VerticalAlignment="Center" FontSize="28"/>
 
                     </Grid>
                 </TabItem>
