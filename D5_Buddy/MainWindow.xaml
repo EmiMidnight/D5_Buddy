@@ -35,17 +35,17 @@
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="141*"/>
-                            <ColumnDefinition Width="152*"/>
-                            <ColumnDefinition Width="341*"/>
+                            <ColumnDefinition Width="210*"/>
+                            <ColumnDefinition Width="283*"/>
                         </Grid.ColumnDefinitions>
-                        <Label x:Name="Name_Label" Content="Name:" Margin="10,0,0,0" RenderTransformOrigin="0.662,0.464" VerticalAlignment="Center" Height="24"/>
-                        <TextBox x:Name="Name_TextBox" TextWrapping="Wrap" Margin="10,0,0,0" MaxLength="6" Grid.Column="1" VerticalAlignment="Center" Height="24"/>
-                        <Label x:Name="DPoint_Label" Content="DPoints:" Grid.Row="1" VerticalAlignment="Center" Margin="10,0,0,0" Height="24"/>
-                        <TextBox x:Name="DPoint_TextBox" TextWrapping="Wrap" Margin="10,0,0,0" MaxLength="9" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Height="24" PreviewTextInput="NumberValidationTextBox"/>
-                        <Label x:Name="Rank_Label" Content="Rank:" Margin="10,0,0,0" Grid.Row="2" VerticalAlignment="Center" Height="24"/>
-                        <ComboBox x:Name="Rank_ComboBox" HorizontalAlignment="Left" VerticalAlignment="Center" Width="142" Grid.Column="1" Grid.Row="2" Height="28" Margin="10,0,0,0"/>
-                        <Label x:Name="SelectedCar_Label" Content="Current Car:" Margin="10,0,0,0" Grid.Row="3" VerticalAlignment="Center" Height="24"/>
-                        <ComboBox x:Name="SelectedCar_ComboBox" HorizontalAlignment="Left" VerticalAlignment="Center" Width="142" Grid.Column="1" Grid.Row="3" Height="28" Margin="10,0,0,0"/>
+                        <Label x:Name="Name_Label" Content="Name:" Margin="10,7,0,7" RenderTransformOrigin="0.662,0.464" VerticalAlignment="Center" Height="24"/>
+                        <TextBox x:Name="Name_TextBox" TextWrapping="Wrap" Margin="10,7" MaxLength="6" Grid.Column="1" VerticalAlignment="Center" Height="24"/>
+                        <Label x:Name="DPoint_Label" Content="DPoints:" Grid.Row="1" VerticalAlignment="Center" Margin="10,7,0,7" Height="24"/>
+                        <TextBox x:Name="DPoint_TextBox" TextWrapping="Wrap" Margin="10,7" MaxLength="9" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Height="24" PreviewTextInput="NumberValidationTextBox"/>
+                        <Label x:Name="Rank_Label" Content="Rank:" Margin="10,7,0,7" Grid.Row="2" VerticalAlignment="Center" Height="24"/>
+                        <ComboBox x:Name="Rank_ComboBox" HorizontalAlignment="Left" VerticalAlignment="Center" Width="190" Grid.Column="1" Grid.Row="2" Height="28" Margin="10,5,0,5"/>
+                        <Label x:Name="SelectedCar_Label" Content="Current Car:" Margin="10,7,0,7" Grid.Row="3" VerticalAlignment="Center" Height="24"/>
+                        <ComboBox x:Name="SelectedCar_ComboBox" HorizontalAlignment="Left" VerticalAlignment="Center" Width="190" Grid.Column="1" Grid.Row="3" Height="28" Margin="10,5,0,5" SelectionChanged="SelectedCarChanged"/>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Garage">
@@ -78,34 +78,34 @@
                         <ComboBox x:Name="FirstCarColor_Combobox" HorizontalAlignment="Left" VerticalAlignment="Center" Width="227" Grid.Column="1" Grid.Row="2" Tag="first" Grid.ColumnSpan="2" Height="28" Margin="0,5" SelectedValuePath="ColorID" DisplayMemberPath="ColorName" SelectionChanged="Color_SelectionChanged"/>
                         <Image x:Name="FirstCarIcon" Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" Source="Resources/AE85L.png" IsEnabled="False" Margin="69,0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="128" Height="64"/>
                         <Rectangle x:Name="FirstCarColorBox" Grid.Column="3" Fill="#FFF4F4F5" HorizontalAlignment="Center" Height="22" Grid.Row="2" Stroke="Black" VerticalAlignment="Center" Width="90" Margin="88,0" RadiusX="4" RadiusY="4"/>
-                        <RadioButton x:Name="FirstCarFullTuneMT" GroupName="Car1Tune" Content="Full Tune (MT)" HorizontalAlignment="Left" Margin="10,5,0,5" Grid.Row="3" VerticalAlignment="Center" Height="28" Width="121" Grid.Column="0"/>
-                        <RadioButton x:Name="FirstCarFullTuneAT" GroupName="Car1Tune" Content="Full Tune (AT)" HorizontalAlignment="Left" Margin="10,5,0,5" Grid.Row="3" VerticalAlignment="Center" Height="28" Width="111" Grid.Column="1"/>
-                        <RadioButton x:Name="FirstCarLastStepTune" GroupName="Car1Tune" Content="Last Step (Before Full)" HorizontalAlignment="Left" Margin="10,5,0,5" Grid.Row="3" VerticalAlignment="Center" Height="28" Width="160" Grid.Column="2" Grid.ColumnSpan="2"/>
-                        <RadioButton x:Name="FirstCarKeepTune" GroupName="Car1Tune" Content="Keep Current" IsChecked="True" HorizontalAlignment="Left" Margin="123,5,0,5" Grid.Row="3" VerticalAlignment="Center" Height="28" Width="111" Grid.Column="3"/>
+                        <RadioButton x:Name="FirstCarFullTuneMT" GroupName="Car1" Tag="FullTuneMT" Content="Full Tune (MT)" HorizontalAlignment="Left" Margin="10,5,0,5" Grid.Row="3" VerticalAlignment="Center" Height="28" Width="121" Grid.Column="0" Checked="TuneChanged"/>
+                        <RadioButton x:Name="FirstCarFullTuneAT" GroupName="Car1" Tag="FullTuneAT" Content="Full Tune (AT)" HorizontalAlignment="Left" Margin="10,5,0,5" Grid.Row="3" VerticalAlignment="Center" Height="28" Width="111" Grid.Column="1" Checked="TuneChanged" />
+                        <RadioButton x:Name="FirstCarLastStepTune" GroupName="Car1" Tag="LastStepTune" Content="Last Step (Before Full)" HorizontalAlignment="Left" Margin="10,5,0,5" Grid.Row="3" VerticalAlignment="Center" Height="28" Width="160" Grid.Column="2" Grid.ColumnSpan="2" Checked="TuneChanged"/>
+                        <RadioButton x:Name="FirstCarKeepTune" GroupName="Car1" Tag="KeepTune" Content="Keep Current" IsChecked="True" HorizontalAlignment="Left" Margin="123,5,0,5" Grid.Row="3" VerticalAlignment="Center" Height="28" Width="111" Grid.Column="3" Checked="TuneChanged"/>
 
                         <Label x:Name="Car2_Label" Content="Car 2" FontWeight="Bold" FontSize="16" Grid.Column="0" Grid.Row="4" VerticalAlignment="Center" Margin="10,0,0,0" Height="26"/>
                         <Label x:Name="SecondCarName_Label" Content="Car: " Grid.Column="0" Grid.Row="5" VerticalAlignment="Center" Margin="10,0,0,0" Height="24"/>
                         <ComboBox x:Name="SecondCarModel_Combobox" HorizontalAlignment="Left" VerticalAlignment="Center" Width="227" Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="2" Tag="second" Height="28" Margin="0,5" SelectedValuePath="CarID" DisplayMemberPath="CarName" SelectionChanged="Car_SelectionChanged"/>
                         <Label x:Name="SecondCarColor_Label" Content="Car Color: " Grid.Column="0" Grid.Row="6" VerticalAlignment="Center" Margin="10,0,0,0" Height="24"/>
-                        <Label x:Name="SecondCarColor_Debug_Label" Content="" Grid.Column="1" Grid.Row="6" VerticalAlignment="Center" Margin="0" Height="24"/>
+                        <ComboBox x:Name="SecondCarColor_Combobox" HorizontalAlignment="Left" VerticalAlignment="Center" Width="227" Grid.Column="1" Grid.Row="6" Tag="second" Grid.ColumnSpan="2" Height="28" Margin="0,5" SelectedValuePath="ColorID" DisplayMemberPath="ColorName" SelectionChanged="Color_SelectionChanged"/>
                         <Image x:Name="SecondCarIcon" Grid.Column="3" Grid.Row="4" Grid.RowSpan="2" Source="Resources/AE85L.png" IsEnabled="False" Margin="69,0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="128" Height="64"/>
                         <Rectangle x:Name="SecondCarColorBox" Grid.Column="3" Fill="#FFF4F4F5" HorizontalAlignment="Center" Height="22" Grid.Row="6" Stroke="Black" VerticalAlignment="Center" Width="90" Margin="88,0" RadiusX="4" RadiusY="4"/>
-                        <RadioButton x:Name="SecondCarFullTuneMT" GroupName="Car2Tune" Content="Full Tune (MT)" HorizontalAlignment="Left" Margin="10,5,0,5" Grid.Row="7" VerticalAlignment="Center" Height="28" Width="121" Grid.Column="0"/>
-                        <RadioButton x:Name="SecondCarFullTuneAT" GroupName="Car2Tune" Content="Full Tune (AT)" HorizontalAlignment="Left" Margin="10,5,0,5" Grid.Row="7" VerticalAlignment="Center" Height="28" Width="111" Grid.Column="1"/>
-                        <RadioButton x:Name="SecondCarLastStepTune" GroupName="Car2Tune" Content="Last Step (Before Full)" HorizontalAlignment="Left" Margin="10,5,0,5" Grid.Row="7" VerticalAlignment="Center" Height="28" Width="160" Grid.Column="2" Grid.ColumnSpan="2"/>
-                        <RadioButton x:Name="SecondCarKeepTune" GroupName="Car2Tune" Content="Keep Current" IsChecked="True" HorizontalAlignment="Left" Margin="123,5,0,5" Grid.Row="7" VerticalAlignment="Center" Height="28" Width="111" Grid.Column="3"/>
+                        <RadioButton x:Name="SecondCarFullTuneMT" GroupName="Car2" Tag="FullTuneMT" Content="Full Tune (MT)" HorizontalAlignment="Left" Margin="10,5,0,5" Grid.Row="7" VerticalAlignment="Center" Height="28" Width="121" Grid.Column="0" Checked="TuneChanged"/>
+                        <RadioButton x:Name="SecondCarFullTuneAT" GroupName="Car2" Tag="FullTuneAT" Content="Full Tune (AT)" HorizontalAlignment="Left" Margin="10,5,0,5" Grid.Row="7" VerticalAlignment="Center" Height="28" Width="111" Grid.Column="1" Checked="TuneChanged"/>
+                        <RadioButton x:Name="SecondCarLastStepTune" GroupName="Car2" Tag="LastStepTune" Content="Last Step (Before Full)" HorizontalAlignment="Left" Margin="10,5,0,5" Grid.Row="7" VerticalAlignment="Center" Height="28" Width="160" Grid.Column="2" Grid.ColumnSpan="2" Checked="TuneChanged"/>
+                        <RadioButton x:Name="SecondCarKeepTune" GroupName="Car2" Tag="KeepTune" Content="Keep Current" IsChecked="True" HorizontalAlignment="Left" Margin="123,5,0,5" Grid.Row="7" VerticalAlignment="Center" Height="28" Width="111" Grid.Column="3" Checked="TuneChanged"/>
 
                         <Label x:Name="Car3_Label" Content="Car 3" FontWeight="Bold" FontSize="16" Grid.Column="0" Grid.Row="8" VerticalAlignment="Center" Margin="10,0,0,0" Height="26"/>
                         <Label x:Name="ThirdCarName_Label" Content="Car: " Grid.Column="0" Grid.Row="9" VerticalAlignment="Center" Margin="10,0,0,0" Height="24"/>
-                        <Label x:Name="ThirdCarName_Debug_Label" Content="" Grid.Column="1" Grid.Row="9" VerticalAlignment="Center" Margin="0" Height="24"/>
+                        <ComboBox x:Name="ThirdCarModel_Combobox" HorizontalAlignment="Left" VerticalAlignment="Center" Width="227" Grid.Column="1" Grid.Row="9" Grid.ColumnSpan="2" Tag="third" Height="28" Margin="0,5" SelectedValuePath="CarID" DisplayMemberPath="CarName" SelectionChanged="Car_SelectionChanged"/>
                         <Label x:Name="ThirdCarColor_Label" Content="Car Color: " Grid.Column="0" Grid.Row="10" VerticalAlignment="Center" Margin="10,0,0,0" Height="24"/>
-                        <Label x:Name="ThirdCarColor_Debug_Label" Content="" Grid.Column="1" Grid.Row="10" VerticalAlignment="Center" Margin="0" Height="24"/>
+                        <ComboBox x:Name="ThirdCarColor_Combobox" HorizontalAlignment="Left" VerticalAlignment="Center" Width="227" Grid.Column="1" Grid.Row="10" Tag="third" Grid.ColumnSpan="2" Height="28" Margin="0,5" SelectedValuePath="ColorID" DisplayMemberPath="ColorName" SelectionChanged="Color_SelectionChanged"/>
                         <Image x:Name="ThirdCarIcon" Grid.Column="3" Grid.Row="8" Grid.RowSpan="2" Source="Resources/AE85L.png" IsEnabled="False" Margin="69,0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="128" Height="64"/>
                         <Rectangle x:Name="ThirdCarColorBox" Grid.Column="3" Fill="#FFF4F4F5" HorizontalAlignment="Center" Height="22" Grid.Row="10" Stroke="Black" VerticalAlignment="Center" Width="90" Margin="88,0" RadiusX="4" RadiusY="4"/>
-                        <RadioButton x:Name="ThirdCarFullTuneMT" GroupName="Car3Tune" Content="Full Tune (MT)" HorizontalAlignment="Left" Margin="10,5,0,5" Grid.Row="11" VerticalAlignment="Center" Height="28" Width="121" Grid.Column="0"/>
-                        <RadioButton x:Name="ThirdCarFullTuneAT" GroupName="Car3Tune" Content="Full Tune (AT)" HorizontalAlignment="Left" Margin="10,5,0,5" Grid.Row="11" VerticalAlignment="Center" Height="28" Width="111" Grid.Column="1"/>
-                        <RadioButton x:Name="ThirdCarLastStepTune" GroupName="Car3Tune" Content="Last Step (Before Full)" HorizontalAlignment="Left" Margin="10,5,0,5" Grid.Row="11" VerticalAlignment="Center" Height="28" Width="160" Grid.Column="2" Grid.ColumnSpan="2"/>
-                        <RadioButton x:Name="ThirdCarKeepTune" GroupName="Car3Tune" Content="Keep Current" IsChecked="True" HorizontalAlignment="Left" Margin="123,5,0,5" Grid.Row="11" VerticalAlignment="Center" Height="28" Width="111" Grid.Column="3"/>
+                        <RadioButton x:Name="ThirdCarFullTuneMT" GroupName="Car3" Tag="FullTuneMT" Content="Full Tune (MT)" HorizontalAlignment="Left" Margin="10,5,0,5" Grid.Row="11" VerticalAlignment="Center" Height="28" Width="121" Grid.Column="0" Checked="TuneChanged"/>
+                        <RadioButton x:Name="ThirdCarFullTuneAT" GroupName="Car3" Tag="FullTuneAT" Content="Full Tune (AT)" HorizontalAlignment="Left" Margin="10,5,0,5" Grid.Row="11" VerticalAlignment="Center" Height="28" Width="111" Grid.Column="1" Checked="TuneChanged"/>
+                        <RadioButton x:Name="ThirdCarLastStepTune" GroupName="Car3" Tag="LastStepTune" Content="Last Step (Before Full)" HorizontalAlignment="Left" Margin="10,5,0,5" Grid.Row="11" VerticalAlignment="Center" Height="28" Width="160" Grid.Column="2" Grid.ColumnSpan="2" Checked="TuneChanged"/>
+                        <RadioButton x:Name="ThirdCarKeepTune" GroupName="Car3" Tag="KeepTune" Content="Keep Current" IsChecked="True" HorizontalAlignment="Left" Margin="123,5,0,5" Grid.Row="11" VerticalAlignment="Center" Height="28" Width="111" Grid.Column="3" Checked="TuneChanged"/>
 
                     </Grid>
 
