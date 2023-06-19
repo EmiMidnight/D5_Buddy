@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:D5_Buddy"
         mc:Ignorable="d"
-        Title="D5 Card Buddy" Height="600" Width="800" MinWidth="800" MinHeight="599" ResizeMode="CanMinimize"
+        Title="D5 Card Buddy" Height="600" Width="940" MinWidth="800" MinHeight="599"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:controls="clr-namespace:MaterialDesignExtensions.Controls;assembly=MaterialDesignExtensions"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -14,18 +14,18 @@
         TextOptions.TextFormattingMode="Ideal" 
         TextOptions.TextRenderingMode="Auto"        
         Background="{DynamicResource MaterialDesignPaper}"
-        FontFamily="{DynamicResource MaterialDesignFont}">
+        FontFamily="{DynamicResource MaterialDesignFont}" ResizeMode="CanMinimize">
     <materialDesign:DialogHost CloseOnClickAway="True">
         <Grid >
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="23*"/>
-                <ColumnDefinition Width="109*"/>
+                <ColumnDefinition Width="140"/>
+                <ColumnDefinition Width="329*"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="LoadCard_Button" Content="Load Card" HorizontalAlignment="Left" Margin="15,24,0,0" VerticalAlignment="Top" Width="108" Click="LoadCard_Button_Click" Height="24"/>
-            <Button x:Name="SaveCard_Button" Content="Save Card" HorizontalAlignment="Left" Margin="15,63,0,0" VerticalAlignment="Top" Width="108" Click="SaveCard_Button_Click" Height="24" IsEnabled="False"/>
-            <TabControl x:Name="tabControl" Grid.Column="1" HorizontalAlignment="Left" Height="551" Margin="10,10,0,0" VerticalAlignment="Top" Width="634"  Style="{StaticResource MaterialDesignTabControl}">
+            <Button x:Name="LoadCard_Button" Content="Load Card" HorizontalAlignment="Center" Margin="0,24,0,0" VerticalAlignment="Top" Width="108" Click="LoadCard_Button_Click" Height="24"/>
+            <Button x:Name="SaveCard_Button" Content="Save Card" HorizontalAlignment="Center" Margin="0,63,0,0" VerticalAlignment="Top" Width="108" Click="SaveCard_Button_Click" Height="24" IsEnabled="False"/>
+            <TabControl x:Name="tabControl" Grid.Column="1" Margin="0,10,0,0"  materialDesign:ColorZoneAssist.Mode="PrimaryMid" Style="{StaticResource MaterialDesignFilledTabControl}">
                 <TabItem Header="General">
-                    <Grid Margin="0,2">
+                    <Grid Margin="0,8">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="38"/>
                             <RowDefinition Height="38"/>
@@ -52,7 +52,7 @@
                     </Grid>
                 </TabItem>
                 <TabItem Header="Garage">
-                    <Grid Margin="0,2,0,0">
+                    <Grid Margin="0,8">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="38"/>
                             <RowDefinition Height="38"/>
@@ -111,13 +111,51 @@
                         <RadioButton x:Name="ThirdCarKeepTune" GroupName="Car3" Tag="KeepTune" Content="Keep Current" IsChecked="True" HorizontalAlignment="Left" Margin="123,5,0,5" Grid.Row="11" VerticalAlignment="Center" Height="28" Width="111" Grid.Column="3" Checked="TuneChanged"/>
 
                     </Grid>
-
                 </TabItem>
                 <TabItem Header="Avatar">
-                    <Grid>
-                        <Label x:Name="label" Content="Coming Soon" HorizontalAlignment="Center" Margin="0,2,0,0" VerticalAlignment="Center" FontWeight="Bold" FontSize="48"/>
-                        <Label x:Name="coming_tm" Content="™" HorizontalAlignment="Center" Margin="472,220,116,241" VerticalAlignment="Center" FontSize="28"/>
+                    <Grid Margin="0,8">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="24*"/>
+                            <RowDefinition Height="24*"/>
+                            <RowDefinition Height="24*"/>
+                            <RowDefinition Height="24*"/>
+                            <RowDefinition Height="24*"/>
+                            <RowDefinition Height="24*"/>
+                            <RowDefinition Height="24*"/>
+                            <RowDefinition Height="95*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="370"/>
+                            <ColumnDefinition Width="111*"/>
+                            <ColumnDefinition Width="319*"/>
+                        </Grid.ColumnDefinitions>
 
+                        <Label Grid.Column="1" Content="Skin:" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Height="32" Width="102" FontWeight="Bold"/>
+                        <Label Grid.Column="1" Content="Body:" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Height="32" Width="102" Grid.Row="1" FontWeight="Bold"/>
+                        <Label Grid.Column="1" Content="Eyes:" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Height="32" Width="102" Grid.Row="2" FontWeight="Bold"/>
+                        <Label Grid.Column="1" Content="Mouth:" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Height="32" Width="102" Grid.Row="3" FontWeight="Bold"/>
+                        <Label Grid.Column="1" Content="Accessoires:" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Height="32" Width="102" Grid.Row="4" FontWeight="Bold"/>
+                        <Label Grid.Column="1" Content="Shades:" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Height="32" Width="102" Grid.Row="5" FontWeight="Bold"/>
+                        <Label Grid.Column="1" Content="Hair:" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Height="32" Width="102" Grid.Row="6" FontWeight="Bold"/>
+                        <ComboBox x:Name="SkinPicker" Grid.Column="2" HorizontalAlignment="Center" Width="278" Height="24" SelectedValuePath="id" DisplayMemberPath="name" SelectionChanged="AvatarPartSelectionChanged"/>
+                        <ComboBox x:Name="BodyPicker" Grid.Column="2" HorizontalAlignment="Center" Width="278" Grid.Row="1" Height="24" SelectedValuePath="id" DisplayMemberPath="name" SelectionChanged="AvatarPartSelectionChanged"/>
+                        <ComboBox x:Name="EyesPicker" Grid.Column="2" HorizontalAlignment="Center" Width="278" Grid.Row="2" Height="24" SelectedValuePath="id" DisplayMemberPath="name" SelectionChanged="AvatarPartSelectionChanged"/>
+                        <ComboBox x:Name="MouthPicker" Grid.Column="2" HorizontalAlignment="Center" Width="278" Grid.Row="3" Height="24" SelectedValuePath="id" DisplayMemberPath="name" SelectionChanged="AvatarPartSelectionChanged"/>
+                        <ComboBox x:Name="AccPicker" Grid.Column="2" HorizontalAlignment="Center" Width="278" Grid.Row="4" Height="24" SelectedValuePath="id" DisplayMemberPath="name" SelectionChanged="AvatarPartSelectionChanged"/>
+                        <ComboBox x:Name="ShadesPicker" Grid.Column="2" HorizontalAlignment="Center" Width="278" Grid.Row="5" Height="24" SelectedValuePath="id" DisplayMemberPath="name" SelectionChanged="AvatarPartSelectionChanged"/>
+                        <ComboBox x:Name="HairPicker" Grid.Column="2" HorizontalAlignment="Center" Width="278" Grid.Row="6" Height="24" SelectedValuePath="id" DisplayMemberPath="name" SelectionChanged="AvatarPartSelectionChanged"/>
+                        <Canvas Grid.Column="0" Grid.Row="0" Grid.RowSpan="7">
+                            <!-- Render avatar preview -->
+                            <Image x:Name="BgImg" HorizontalAlignment="Left" Height="256" VerticalAlignment="Top" Width="256" MinWidth="256" MinHeight="256" MaxWidth="256" MaxHeight="256" Source="/Resources/D5/BG/0.png" Canvas.Left="38" Canvas.Top="40"/>
+                            <Image x:Name="HairBgImg" HorizontalAlignment="Left" Height="256" VerticalAlignment="Top" Width="256" MinWidth="256" MinHeight="256" MaxWidth="256" MaxHeight="256" Source="/Resources/D5/WMN/370_bg.png" Canvas.Left="38" Canvas.Top="40"/>
+                            <Image x:Name="SkinImg" HorizontalAlignment="Left" Height="256" VerticalAlignment="Top" Width="256" MinWidth="256" MinHeight="256" MaxWidth="256" MaxHeight="256" Source="/Resources/D5/WMN/21.png" Canvas.Left="38" Canvas.Top="40"/>
+                            <Image x:Name="BodyImg" HorizontalAlignment="Left" Height="256" VerticalAlignment="Top" Width="256" MinWidth="256" MinHeight="256" MaxWidth="256" MaxHeight="256" Source="/Resources/D5/WMN/143.png" Canvas.Left="38" Canvas.Top="40"/>
+                            <Image x:Name="EyesImg" HorizontalAlignment="Left" Height="256" VerticalAlignment="Top" Width="256" MinWidth="256" MinHeight="256" MaxWidth="256" MaxHeight="256" Source="/Resources/D5/WMN/182.png" Canvas.Left="38" Canvas.Top="40"/>
+                            <Image x:Name="MouthImg" HorizontalAlignment="Left" Height="256" VerticalAlignment="Top" Width="256" MinWidth="256" MinHeight="256" MaxWidth="256" MaxHeight="256" Source="/Resources/D5/WMN/216.png" Canvas.Left="38" Canvas.Top="40"/>
+                            <Image x:Name="AccImg" HorizontalAlignment="Left" Height="256" VerticalAlignment="Top" Width="256" MinWidth="256" MinHeight="256" MaxWidth="256" MaxHeight="256" Source="/Resources/avatar_empty.png" Canvas.Left="38" Canvas.Top="40"/>
+                            <Image x:Name="ShadesImg" HorizontalAlignment="Left" Height="256" VerticalAlignment="Top" Width="256" MinWidth="256" MinHeight="256" MaxWidth="256" MaxHeight="256" Source="/Resources/avatar_empty.png" Canvas.Left="38" Canvas.Top="40"/>
+                            <Image x:Name="HairFgImg" HorizontalAlignment="Left" Height="256" VerticalAlignment="Top" Width="256" MinWidth="256" MinHeight="256" MaxWidth="256" MaxHeight="256" Source="/Resources/D5/WMN/370_fg.png" Canvas.Left="38" Canvas.Top="40"/>
+                        </Canvas>
                     </Grid>
                 </TabItem>
             </TabControl>

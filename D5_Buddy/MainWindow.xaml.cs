@@ -3,9 +3,11 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
@@ -23,12 +25,8 @@ using System.Windows.Shapes;
 
 namespace D5_Buddy
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
-
         /// <summary>
         /// CarDB entry format, storing a cars ID, name, model etc
         /// </summary>
@@ -105,10 +103,34 @@ namespace D5_Buddy
             {
                 Model = "";
             }
-
         }
 
-        readonly Encoding shiftJIS = Encoding.GetEncoding("shift-jis");
+        public class AvatarPart
+        {
+            public int id { get; set; }
+            public int categoryId { get; set; }
+            public string name { get; set; }
+
+            public AvatarPart(int ID, int Category, string Name)
+            {
+                id = ID;
+                categoryId = Category;
+                name = Name;
+            }
+        }
+
+        public class Avatar
+        {
+            public int gender { get; set; } = 0;
+            public int skin { get; set; } = 21;
+            public int body { get; set; } = 143;
+            public int eyes { get; set; } = 182;
+            public int mouth { get; set; } = 216;
+            public int acc { get; set; } = 0;
+            public int shades { get; set; } = 0;
+            public int hair { get; set; } = 370;
+        }
+
         readonly string CarJSONPath = "D5_Buddy.Resources.cars.json";
         string CarJSON = "";
         public ObservableCollection<CarDB> AllCars = new ObservableCollection<CarDB>();
@@ -117,8 +139,32 @@ namespace D5_Buddy
         // Set up empty player variables here
         string LoadedName = "";
         int LoadedDPoints = 0;
-        string LoadedGender = "Male";
         int LoadedRank = 0;
+        int GameVersion = 5;
+        Avatar loadedAvatar = new();
+
+        string MaleJSONPath = "D5_Buddy.Resources.D5.man_parts.json";
+        string FemaleJSONPath = "D5_Buddy.Resources.D5.wmn_parts.json";
+        string MaleJSON = "";
+        string FemaleJSON = "";
+        Int16[] CurrentPartsList = { 0, 0, 0, 0, 0, 0, 0 };
+        public ObservableCollection<AvatarPart> AllPartsMale = new ObservableCollection<AvatarPart>();
+        public ObservableCollection<AvatarPart> AllPartsFemale = new ObservableCollection<AvatarPart>();
+        public ObservableCollection<AvatarPart> Parts_Female_Hair = new ObservableCollection<AvatarPart>();
+        public ObservableCollection<AvatarPart> Parts_Female_Skin = new ObservableCollection<AvatarPart>();
+        public ObservableCollection<AvatarPart> Parts_Female_Body = new ObservableCollection<AvatarPart>();
+        public ObservableCollection<AvatarPart> Parts_Female_Shades = new ObservableCollection<AvatarPart>();
+        public ObservableCollection<AvatarPart> Parts_Female_Eyes = new ObservableCollection<AvatarPart>();
+        public ObservableCollection<AvatarPart> Parts_Female_Mouth = new ObservableCollection<AvatarPart>();
+        public ObservableCollection<AvatarPart> Parts_Female_Acc = new ObservableCollection<AvatarPart>();
+        // Category Lists Male
+        public ObservableCollection<AvatarPart> Parts_Male_Hair = new ObservableCollection<AvatarPart>();
+        public ObservableCollection<AvatarPart> Parts_Male_Skin = new ObservableCollection<AvatarPart>();
+        public ObservableCollection<AvatarPart> Parts_Male_Body = new ObservableCollection<AvatarPart>();
+        public ObservableCollection<AvatarPart> Parts_Male_Shades = new ObservableCollection<AvatarPart>();
+        public ObservableCollection<AvatarPart> Parts_Male_Eyes = new ObservableCollection<AvatarPart>();
+        public ObservableCollection<AvatarPart> Parts_Male_Mouth = new ObservableCollection<AvatarPart>();
+        public ObservableCollection<AvatarPart> Parts_Male_Acc = new ObservableCollection<AvatarPart>();
 
         #region Debug Variables
         int LoadedSelectedCar = 0;
@@ -143,6 +189,8 @@ namespace D5_Buddy
         public bool SelectedCarRefreshBlocked = false;
         public bool CardLoading = false;
 
+        public bool AvatarLoaded = false;
+
         public bool KeepVisualTune = false;
         public byte[] EmptyVisualTuningBytes = {
             0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF,
@@ -153,10 +201,16 @@ namespace D5_Buddy
             0x00, 0xFF, 0x00, 0xFF
         };
 
-
         public MainWindow()
         {
             InitializeComponent();
+
+            Debug.WriteLine(System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceNames());
+
+            foreach (var item in System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceNames())
+            {
+                Debug.WriteLine(item.ToString());
+            }
             using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(CarJSONPath))
             {
                 TextReader tr = new StreamReader(stream);
@@ -164,11 +218,145 @@ namespace D5_Buddy
             }
             AllCars = JsonConvert.DeserializeObject<ObservableCollection<CarDB>>(CarJSON);
             Rank_ComboBox.ItemsSource = AllRanks;
+
+            Debug.WriteLine("Loading Male Parts JSON");
+            // Read Partslist (All Male) from json in resource folder
+            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(MaleJSONPath))
+            {
+                TextReader tr = new StreamReader(stream);
+                MaleJSON = tr.ReadToEnd();
+            }
+            Debug.WriteLine("Loading Female Parts JSON");
+            // Read Partslist (All Female) from json in resource folder
+            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(FemaleJSONPath))
+            {
+                TextReader tr = new StreamReader(stream);
+                FemaleJSON = tr.ReadToEnd();
+            }
+            Debug.WriteLine("JSON READ");
+            // Split Parts List into specific Lists (Female)
+            AllPartsFemale = JsonConvert.DeserializeObject<ObservableCollection<AvatarPart>>(FemaleJSON);
+            AllPartsMale = JsonConvert.DeserializeObject<ObservableCollection<AvatarPart>>(MaleJSON);
+            Parts_Female_Skin = new ObservableCollection<AvatarPart>(AllPartsFemale.Where(x => x.categoryId == 1));
+            Parts_Female_Body = new ObservableCollection<AvatarPart>(AllPartsFemale.Where(x => x.categoryId == 2));
+            Parts_Female_Eyes = new ObservableCollection<AvatarPart>(AllPartsFemale.Where(x => x.categoryId == 3));
+            Parts_Female_Mouth = new ObservableCollection<AvatarPart>(AllPartsFemale.Where(x => x.categoryId == 4));
+            Parts_Female_Acc = new ObservableCollection<AvatarPart>(AllPartsFemale.Where(x => x.categoryId == 5));
+            Parts_Female_Shades = new ObservableCollection<AvatarPart>(AllPartsFemale.Where(x => x.categoryId == 6));
+            Parts_Female_Hair = new ObservableCollection<AvatarPart>(AllPartsFemale.Where(x => x.categoryId == 7));
+            // Split Parts List into specific Lists (Male)
+            Parts_Male_Skin = new ObservableCollection<AvatarPart>(AllPartsMale.Where(x => x.categoryId == 1));
+            Parts_Male_Body = new ObservableCollection<AvatarPart>(AllPartsMale.Where(x => x.categoryId == 2));
+            Parts_Male_Eyes = new ObservableCollection<AvatarPart>(AllPartsMale.Where(x => x.categoryId == 3));
+            Parts_Male_Mouth = new ObservableCollection<AvatarPart>(AllPartsMale.Where(x => x.categoryId == 4));
+            Parts_Male_Acc = new ObservableCollection<AvatarPart>(AllPartsMale.Where(x => x.categoryId == 5));
+            Parts_Male_Shades = new ObservableCollection<AvatarPart>(AllPartsMale.Where(x => x.categoryId == 6));
+            Parts_Male_Hair = new ObservableCollection<AvatarPart>(AllPartsMale.Where(x => x.categoryId == 7));
+
+            // Add default NONE entry for shades and accessoires
+            AvatarPart Shades_None = new AvatarPart(0, 6, "None");
+            AvatarPart Acc_None = new AvatarPart(0, 5, "None");
+
+            Parts_Female_Shades.Insert(0, Shades_None);
+            Parts_Female_Acc.Insert(0, Acc_None);
+            Parts_Male_Shades.Insert(0, Shades_None);
+            Parts_Male_Acc.Insert(0, Acc_None);
+        }
+
+        public void LoadPartDropdowns()
+        {
+            if (loadedAvatar.gender == 1)
+            {
+                SkinPicker.ItemsSource = Parts_Female_Skin;
+                BodyPicker.ItemsSource = Parts_Female_Body;
+                EyesPicker.ItemsSource = Parts_Female_Eyes;
+                MouthPicker.ItemsSource = Parts_Female_Mouth;
+                AccPicker.ItemsSource = Parts_Female_Acc;
+                ShadesPicker.ItemsSource = Parts_Female_Shades;
+                HairPicker.ItemsSource = Parts_Female_Hair;
+            }
+            else
+            {
+                SkinPicker.ItemsSource = Parts_Male_Skin;
+                BodyPicker.ItemsSource = Parts_Male_Body;
+                EyesPicker.ItemsSource = Parts_Male_Eyes;
+                MouthPicker.ItemsSource = Parts_Male_Mouth;
+                AccPicker.ItemsSource = Parts_Male_Acc;
+                ShadesPicker.ItemsSource = Parts_Male_Shades;
+                HairPicker.ItemsSource = Parts_Male_Hair;
+            }
+
+        }
+
+        private void UpdateParts()
+        {
+            // Set Shades and Acc to zero by default
+            ShadesPicker.SelectedValue = 0;
+            AccPicker.SelectedValue = 0;
+            ChangeImage(0, 6);
+            ChangeImage(0, 5);
+            // Get every part field, run through FilterPart
+            foreach (int part in CurrentPartsList)
+            {
+                FilterPart(part);
+            }
+        }
+
+        private void FilterPart(int partID)
+        {
+            //var part = new ObservableCollection<IDZ_Avatar_Part>();
+            var partCategory = 0;
+            if (partID == 0)
+            {
+                return;
+            }
+            if (loadedAvatar.gender == 1)
+            {
+                // Get Part from List
+                var part = new ObservableCollection<AvatarPart>(AllPartsFemale.Where(x => x.id == partID)).First();
+                partCategory = part.categoryId;
+            }
+            else
+            {
+                // Get Part from List
+                var part = new ObservableCollection<AvatarPart>(AllPartsMale.Where(x => x.id == partID)).First();
+                partCategory = part.categoryId;
+            }
+
+            switch (partCategory)
+            {
+                case 1:
+                    SkinPicker.SelectedValue = partID;
+                    break;
+                case 2:
+                    BodyPicker.SelectedValue = partID;
+                    break;
+                case 3:
+                    EyesPicker.SelectedValue = partID;
+                    break;
+                case 4:
+                    MouthPicker.SelectedValue = partID;
+                    break;
+                case 5:
+                    AccPicker.SelectedValue = partID;
+                    break;
+                case 6:
+                    ShadesPicker.SelectedValue = partID;
+                    break;
+                case 7:
+                    HairPicker.SelectedValue = partID;
+                    break;
+                default:
+                    Console.WriteLine("No category? This is an error, we are doomed.");
+                    break;
+            }
+            ChangeImage(partID, partCategory);
         }
 
         private void LoadCard_Button_Click(object sender, RoutedEventArgs e)
         {
             UnloadCard();
+
 
             CardLoading = true;
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -183,6 +371,11 @@ namespace D5_Buddy
                     int gameVersion = BitConverter.ToInt16(binaryReader.ReadBytes(2), 0);
                     if (gameVersion == 21008)
                     {
+
+                        // LOAD FROM CARD
+                        fs.Seek(0x1E, SeekOrigin.Begin);
+                        loadedAvatar.gender = binaryReader.ReadByte();
+                        LoadPartDropdowns();
 
                         // CAR AMOUNT, SELECTED CAR
                         fs.Seek(0x69, SeekOrigin.Begin);
@@ -218,8 +411,22 @@ namespace D5_Buddy
                             }
                         }
                         byte[] nameBufferFiltered = nameList.ToArray();
+                        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+                        Encoding shiftJIS = Encoding.GetEncoding("shift-jis");
                         string nameString = shiftJIS.GetString(nameBufferFiltered);
                         LoadedName = nameString;
+
+                        ////////////////////////
+                        //// AVATAR DATA
+                        ////////////////////////
+
+                        fs.Seek(0x88, SeekOrigin.Begin);
+                        byte[] avatarBytes = binaryReader.ReadBytes(11);
+                        Int16[] avatarParts = GetAvatarPartListFromCard(avatarBytes);
+                        CurrentPartsList = avatarParts;
+                        UpdateParts();
+                        AvatarLoaded = true;
+
 
                         ////////////////////////
                         //// LOAD FIRST CAR
@@ -363,8 +570,6 @@ namespace D5_Buddy
             SelectedCar_ComboBox.SelectedIndex = LoadedSelectedCar;
             SelectedCarRefreshBlocked = false;
 
-
-
             if (FirstCar.Model != "")
             {
                 FirstCarModel_Combobox.ItemsSource = AllCars;
@@ -410,6 +615,8 @@ namespace D5_Buddy
                         KeepVisualTune = (bool)KeepVisuals_CheckBox.IsChecked;
                         // SAVE NEW NAME
                         string newName = ToFullWidth(Name_TextBox.Text);
+                        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+                        Encoding shiftJIS = Encoding.GetEncoding("shift-jis");
                         byte[] newNameBytes = shiftJIS.GetBytes(newName);
                         byte[] emptyName = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
                         memoryStream.Seek(0xB4, SeekOrigin.Begin);
@@ -433,6 +640,19 @@ namespace D5_Buddy
                         binaryWriter.Write(Convert.ToByte(LoadedSelectedCar));
 
                         ////////////////////////
+                        //// AVATAR DATA
+                        //////////////////////// 
+
+                        // Clear first in case the new list is shorter
+                        byte[] emptyAvatar = new byte[11] { 0,0,0,0,0,0,0,0,0,0,0 };
+                        memoryStream.Seek(0x88, SeekOrigin.Begin);
+                        binaryWriter.Write(emptyAvatar);
+
+                        memoryStream.Seek(0x88, SeekOrigin.Begin);
+                        byte[] newAvatar = ConvertPartListToBytes(CurrentPartsList);
+                        binaryWriter.Write(newAvatar);
+
+                        ////////////////////////
                         //// WRITE FIRST CAR
                         ////////////////////////
 
@@ -447,7 +667,7 @@ namespace D5_Buddy
                         binaryWriter.Write(FirstCar.NewTuning);
 
                         // Clean Visual Tuning Parts
-                        if(!KeepVisualTune && FirstCar.OriginalModel != FirstCar.Model)
+                        if (!KeepVisualTune && FirstCar.OriginalModel != FirstCar.Model)
                         {
                             memoryStream.Seek(0xE4, SeekOrigin.Begin);
                             binaryWriter.Write(EmptyVisualTuningBytes);
@@ -504,7 +724,6 @@ namespace D5_Buddy
 
                     }
                 }
-                //File.WriteAllBytes("saved.card", CardInMemory);
                 Console.WriteLine("Card Saving Path: " + CardPath);
                 File.WriteAllBytes(CardPath, CardInMemory);
                 ShowPopupNotification("Card has been saved.");
@@ -549,7 +768,7 @@ namespace D5_Buddy
                     FirstCarColor_Combobox.ItemsSource = null;
                     RefreshBlocked = false;
                     FirstCarColor_Combobox.ItemsSource = FirstCar.Colors;
-                    if(!CardLoading)
+                    if (!CardLoading)
                     {
                         FirstCarColor_Combobox.SelectedIndex = 0;
                     }
@@ -607,7 +826,7 @@ namespace D5_Buddy
             {
                 string whichColorSlot = ((ComboBox)sender).Tag.ToString();
                 int ColorIndex = int.Parse((sender as ComboBox).SelectedValue.ToString());
-                
+
                 switch (whichColorSlot)
                 {
                     case "first":
@@ -670,7 +889,7 @@ namespace D5_Buddy
 
         private void UnhideSlot(int slot)
         {
-            switch(slot)
+            switch (slot)
             {
                 case 1:
                     Car1_Label.Visibility = Visibility.Visible;
@@ -714,7 +933,6 @@ namespace D5_Buddy
                     ThirdCarKeepTune.Visibility = Visibility.Visible;
                     break;
             }
-
         }
 
         private void LoadCarFromID(ref Car CarVariable)
@@ -732,8 +950,8 @@ namespace D5_Buddy
             string SelectedTune = ((RadioButton)sender).Tag.ToString();
             string SelectedCar = ((RadioButton)sender).GroupName;
             Console.WriteLine("Selected Tune: " + SelectedTune + " From: " + SelectedCar);
-            
-            switch(SelectedCar)
+
+            switch (SelectedCar)
             {
                 case "Car1":
                     ChangeTune(ref FirstCar, SelectedTune);
@@ -746,12 +964,11 @@ namespace D5_Buddy
                     ChangeTune(ref ThirdCar, SelectedTune);
                     break;
             }
-
         }
 
         private void ChangeTune(ref Car CarVariable, string Tune)
-        { 
-            switch(Tune)
+        {
+            switch (Tune)
             {
                 case "FullTuneMT":
                     Console.WriteLine("Change FullTuneMT");
@@ -798,16 +1015,177 @@ namespace D5_Buddy
 
             LoadedName = "";
             LoadedDPoints = 0;
-            LoadedGender = "Male";
             LoadedRank = 0;
+            loadedAvatar = new();
 
             CarsInGarage.Clear();
             CardInMemory = new byte[2];
         }
 
+        private void GetSelectedPartsFromUI()
+        {
+            if(SkinPicker.SelectedValue.ToString() != null)
+            {
+                CurrentPartsList[0] = (short)int.Parse(SkinPicker.SelectedValue.ToString());
+            }
+
+            CurrentPartsList[1] = (short)int.Parse(BodyPicker.SelectedValue.ToString());
+            CurrentPartsList[2] = (short)int.Parse(EyesPicker.SelectedValue.ToString());
+            CurrentPartsList[3] = (short)int.Parse(MouthPicker.SelectedValue.ToString());
+            CurrentPartsList[4] = (short)int.Parse(AccPicker.SelectedValue.ToString());
+            CurrentPartsList[5] = (short)int.Parse(ShadesPicker.SelectedValue.ToString());
+            CurrentPartsList[6] = (short)int.Parse(HairPicker.SelectedValue.ToString());
+        }
+
+        public Int16[] GetAvatarPartListFromCard(byte[] avatarListBytes)
+        {
+            // jesus christ
+            Int16[] partList = new Int16[7];
+            partList[0] = (short)(((avatarListBytes[1] & 0xF) << 8) | avatarListBytes[0]);
+            partList[1] = (short)((avatarListBytes[1] >> 4) | (16 * avatarListBytes[2]));
+            partList[2] = (short)(((avatarListBytes[4] & 0xF) << 8) | avatarListBytes[3]);
+            partList[3] = (short)((avatarListBytes[4] >> 4) | (16 * avatarListBytes[5]));
+            partList[4] = (short)(((avatarListBytes[7] & 0xF) << 8) | avatarListBytes[6]);
+            partList[5] = (short)((avatarListBytes[7] >> 4) | (16 * avatarListBytes[8]));
+            partList[6] = (short)(((avatarListBytes[10] & 0xF) << 8) | avatarListBytes[9]);
+
+            Debug.WriteLine($"Avatar parts: {partList[0].ToString()},{partList[1].ToString()},{partList[2].ToString()},{partList[3].ToString()},{partList[4].ToString()},{partList[5].ToString()},{partList[6].ToString()}");
+            return partList;
+        }
+
+        public byte[] ConvertPartListToBytes(Int16[] partList)
+        {
+            // tears rolling down my face
+            // for i have lost all hope
+            byte[] byteList = new byte[11];
+            byte[] part1 = BitConverter.GetBytes(partList[0]);
+            byteList[0] = part1[0];
+            byteList[1] = part1[1];
+            byteList[1] = (byte)((part1[1] & 0xF) | (byteList[1] & 0xF0));
+            Int16 part2Helper = ((short)((byteList[1] & 0xF) | (16 * partList[1])));
+            byteList[1] = BitConverter.GetBytes(part2Helper)[0];
+            byteList[2] = BitConverter.GetBytes(part2Helper)[1];
+
+            byte[] part3 = BitConverter.GetBytes(partList[2]);
+            byteList[3] = part3[0];
+            byteList[4] = part3[1];
+            byteList[4] = (byte)((part3[1] & 0xF) | (byteList[4] & 0xF0));
+            Int16 part4Helper = ((short)((byteList[4] & 0xF) | (16 * partList[3])));
+            byteList[4] = BitConverter.GetBytes(part4Helper)[0];
+            byteList[5] = BitConverter.GetBytes(part4Helper)[1];
+
+            byte[] part5 = BitConverter.GetBytes(partList[4]);
+            byteList[6] = part5[0];
+            byteList[7] = part5[1];
+            byteList[7] = (byte)((part5[1] & 0xF) | (byteList[7] & 0xF0));
+            Int16 part6Helper = ((short)((byteList[7] & 0xF) | (16 * partList[5])));
+            byteList[7] = BitConverter.GetBytes(part6Helper)[0];
+            byteList[8] = BitConverter.GetBytes(part6Helper)[1];
+
+            byte[] part7 = BitConverter.GetBytes(partList[6]);
+            byteList[9] = part7[0];
+            byteList[10] = part7[1];
+            byteList[10] = (byte)((part7[1] & 0xF) | (byteList[10] & 0xF0));
+            Debug.WriteLine($"Avatar parts: {Convert.ToHexString(byteList)}");
+            return byteList;
+        }
+
+        private void ChangeImage(int partID, int partCategory)
+        {
+            var gender_short = "MAN";
+            if (loadedAvatar.gender == 1)
+            {
+                gender_short = "WMN";
+            }
+
+            if (partCategory == 7)
+            {
+                Uri hair_bg_uri = new Uri("Resources/D" + GameVersion.ToString() + "/" + gender_short + "/" + partID.ToString() + "_bg.png", UriKind.Relative);
+                Console.WriteLine(hair_bg_uri);
+                ImageSource hair_bg_Source = new BitmapImage(hair_bg_uri);
+                HairBgImg.Source = hair_bg_Source;
+                Uri hair_uri = new Uri("Resources/D" + GameVersion.ToString() + "/" + gender_short + "/" + partID.ToString() + "_fg.png", UriKind.Relative);
+                ImageSource hair_Source = new BitmapImage(hair_uri);
+                HairFgImg.Source = hair_Source;
+            }
+            else
+            {
+                Uri imageUri = new Uri("Resources/D" + GameVersion.ToString() + "/" + gender_short + "/" + partID.ToString() + ".png", UriKind.Relative);
+                ImageSource imageSource = new BitmapImage(imageUri);
+                switch (partCategory)
+                {
+                    case 1:
+
+                        SkinImg.Source = imageSource;
+                        break;
+                    case 2:
+                        BodyImg.Source = imageSource;
+                        break;
+                    case 3:
+                        EyesImg.Source = imageSource;
+                        break;
+                    case 4:
+                        MouthImg.Source = imageSource;
+                        break;
+                    case 5:
+                        AccImg.Source = imageSource;
+                        break;
+                    case 6:
+                        ShadesImg.Source = imageSource;
+                        break;
+                    default:
+                        Console.WriteLine("No category? This is an error, we are doomed.");
+                        break;
+                }
+
+            }
+        }
+
+        private void AvatarPartSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int partCategory = 0;
+            int partID = 0;
+            if (((ComboBox)sender).SelectedValue != null)
+            {
+                partID = int.Parse(((ComboBox)sender).SelectedValue.ToString());
+            }
+
+            switch (((ComboBox)sender).Name)
+            {
+                case "SkinPicker":
+                    partCategory = 1;
+                    break;
+                case "BodyPicker":
+                    partCategory = 2;
+                    break;
+                case "EyesPicker":
+                    partCategory = 3;
+                    break;
+                case "MouthPicker":
+                    partCategory = 4;
+                    break;
+                case "AccPicker":
+                    partCategory = 5;
+                    break;
+                case "ShadesPicker":
+                    partCategory = 6;
+                    break;
+                case "HairPicker":
+                    partCategory = 7;
+                    break;
+            }
+            ChangeImage(partID, partCategory);
+            // Update avatar in memory
+            if(AvatarLoaded)
+            {
+            GetSelectedPartsFromUI();
+            }
+
+        }
+
         private void VisualTuneWarning(object sender, RoutedEventArgs e)
         {
-            if(((CheckBox)sender).IsChecked == true)
+            if (((CheckBox)sender).IsChecked == true)
             {
                 ShowPopupNotification("Warning: \n" +
                     "This will keep visual tuning parts \n" +

@@ -1,244 +1,1081 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Costura.Fody.4.1.0\build\Costura.Fody.props" Condition="Exists('..\packages\Costura.Fody.4.1.0\build\Costura.Fody.props')" />
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B6A9CF1F-044E-4DE5-86AA-7D2484E8F294}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
-    <RootNamespace>D5_Buddy</RootNamespace>
-    <AssemblyName>D5_Buddy</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <WarningLevel>4</WarningLevel>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <Deterministic>true</Deterministic>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>D5_Buddy_Icon.ico</ApplicationIcon>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="Costura, Version=4.1.0.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">
-      <HintPath>..\packages\Costura.Fody.4.1.0\lib\net40\Costura.dll</HintPath>
-    </Reference>
-    <Reference Include="MaterialDesignColors, Version=1.2.4.1361, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MaterialDesignColors.1.2.4\lib\net45\MaterialDesignColors.dll</HintPath>
-    </Reference>
-    <Reference Include="MaterialDesignExtensions, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MaterialDesignExtensions.3.1.0\lib\net45\MaterialDesignExtensions.dll</HintPath>
-    </Reference>
-    <Reference Include="MaterialDesignThemes.Wpf, Version=3.1.1.1361, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MaterialDesignThemes.3.1.1\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.7.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Text.Encoding.CodePages, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Text.Encoding.CodePages.4.7.0\lib\net461\System.Text.Encoding.CodePages.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-  </ItemGroup>
-  <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <None Include="packages.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <EmbeddedResource Include="Resources\cars.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\AE85L.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\AE86L.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\AE86T.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\AP1.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\BNR32.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\BNR34.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\CE9A.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\CN9A.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\CT9A7.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\CT9A9.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\DC2.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\EA11R.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\EG6.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\EK9.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\FC3S.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\FD3S.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\FD3S6.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\GC8S5.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\GDBF.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\JZA80.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\NA6CE.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\NB8C.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\RPS13.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\RPS13K.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\S13K.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\S14Q.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\S15.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\SE3P.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\SW20.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\SXE10.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\ZZW30.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="D5_Buddy_Icon.ico" />
-    <Content Include="Readme.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\MaterialDesignThemes.3.1.1\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.3.1.1\build\MaterialDesignThemes.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+        <TargetFramework>net6.0-windows</TargetFramework>
+        <OutputType>WinExe</OutputType>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <UseWPF>true</UseWPF>
+        <PublishSingleFile>true</PublishSingleFile>
+        <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\MaterialDesignThemes.3.1.1\build\MaterialDesignThemes.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MaterialDesignThemes.3.1.1\build\MaterialDesignThemes.targets'))" />
-    <Error Condition="!Exists('..\packages\Fody.6.2.0\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.6.2.0\build\Fody.targets'))" />
-    <Error Condition="!Exists('..\packages\Costura.Fody.4.1.0\build\Costura.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Costura.Fody.4.1.0\build\Costura.Fody.props'))" />
-  </Target>
-  <PropertyGroup>
-    <PostBuildEvent>rd /s /q "$(SolutionDir)ReleaseVersion"
-xcopy "$(TargetDir)*" "$(SolutionDir)ReleaseVersion" /e /y /i /r
-cd $(SolutionDir)ReleaseVersion
-powershell Compress-Archive -Path '$(TargetDir)*.exe', '$(TargetDir)*.txt', '$(TargetDir)*.config' -DestinationPath '$(SolutionDir)ReleaseVersion\D5Buddy.zip' -Force</PostBuildEvent>
-  </PropertyGroup>
-  <Import Project="..\packages\Fody.6.2.0\build\Fody.targets" Condition="Exists('..\packages\Fody.6.2.0\build\Fody.targets')" />
+    <PropertyGroup>
+        <ApplicationIcon>D5_Buddy_Icon.ico</ApplicationIcon>
+    </PropertyGroup>
+    <ItemGroup>
+      <None Remove="0.png" />
+      <None Remove="370_bg.png" />
+      <None Remove="Resources\avatar_empty.png" />
+      <None Remove="Resources\D5\BG\0.png" />
+      <None Remove="Resources\D5\BG\0_fg.png" />
+      <None Remove="Resources\D5\MAN\0.png" />
+      <None Remove="Resources\D5\man_parts.json" />
+      <None Remove="Resources\D5\WMN\0.png" />
+      <None Remove="Resources\D5\wmn_parts.json" />
+    </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="Resources\cars.json" />
+    </ItemGroup>
+    <ItemGroup>
+        <Resource Include="0.png" />
+        <Resource Include="370_bg.png" />
+        <Resource Include="Resources\AE85L.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Resources\AE86L.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Resources\AE86T.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Resources\AP1.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Resources\avatar_empty.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Resources\BNR32.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Resources\BNR34.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Resources\CE9A.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Resources\CN9A.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Resources\CT9A7.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Resources\CT9A9.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Resources\D5\BG\0.png">
+          <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Resources\D5\BG\0_fg.png" />
+        <Resource Include="Resources\D5\MAN\0.png" />
+        <EmbeddedResource Include="Resources\D5\man_parts.json" />
+        <Resource Include="Resources\D5\WMN\0.png" />
+        <EmbeddedResource Include="Resources\D5\wmn_parts.json" />
+        <Resource Include="Resources\DC2.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Resources\EA11R.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Resources\EG6.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Resources\EK9.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Resources\FC3S.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Resources\FD3S.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Resources\FD3S6.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Resources\GC8S5.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Resources\GDBF.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Resources\JZA80.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Resources\NA6CE.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Resources\NB8C.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Resources\RPS13.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Resources\RPS13K.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Resources\S13K.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Resources\S14Q.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Resources\S15.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Resources\SE3P.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Resources\SW20.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Resources\SXE10.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+        <Resource Include="Resources\ZZW30.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Resource>
+    </ItemGroup>
+    <ItemGroup>
+        <Resource Include="Resources\D5\MAN\1.png" />
+        <Resource Include="Resources\D5\MAN\10.png" />
+        <Resource Include="Resources\D5\MAN\100.png" />
+        <Resource Include="Resources\D5\MAN\101.png" />
+        <Resource Include="Resources\D5\MAN\102.png" />
+        <Resource Include="Resources\D5\MAN\103.png" />
+        <Resource Include="Resources\D5\MAN\104.png" />
+        <Resource Include="Resources\D5\MAN\105.png" />
+        <Resource Include="Resources\D5\MAN\106.png" />
+        <Resource Include="Resources\D5\MAN\107.png" />
+        <Resource Include="Resources\D5\MAN\108.png" />
+        <Resource Include="Resources\D5\MAN\109.png" />
+        <Resource Include="Resources\D5\MAN\11.png" />
+        <Resource Include="Resources\D5\MAN\110.png" />
+        <Resource Include="Resources\D5\MAN\111.png" />
+        <Resource Include="Resources\D5\MAN\112.png" />
+        <Resource Include="Resources\D5\MAN\113.png" />
+        <Resource Include="Resources\D5\MAN\114.png" />
+        <Resource Include="Resources\D5\MAN\115.png" />
+        <Resource Include="Resources\D5\MAN\116.png" />
+        <Resource Include="Resources\D5\MAN\117.png" />
+        <Resource Include="Resources\D5\MAN\118.png" />
+        <Resource Include="Resources\D5\MAN\119.png" />
+        <Resource Include="Resources\D5\MAN\12.png" />
+        <Resource Include="Resources\D5\MAN\120.png" />
+        <Resource Include="Resources\D5\MAN\121.png" />
+        <Resource Include="Resources\D5\MAN\122.png" />
+        <Resource Include="Resources\D5\MAN\123.png" />
+        <Resource Include="Resources\D5\MAN\124.png" />
+        <Resource Include="Resources\D5\MAN\125.png" />
+        <Resource Include="Resources\D5\MAN\126.png" />
+        <Resource Include="Resources\D5\MAN\127.png" />
+        <Resource Include="Resources\D5\MAN\128.png" />
+        <Resource Include="Resources\D5\MAN\129.png" />
+        <Resource Include="Resources\D5\MAN\13.png" />
+        <Resource Include="Resources\D5\MAN\130.png" />
+        <Resource Include="Resources\D5\MAN\131.png" />
+        <Resource Include="Resources\D5\MAN\132.png" />
+        <Resource Include="Resources\D5\MAN\133.png" />
+        <Resource Include="Resources\D5\MAN\134.png" />
+        <Resource Include="Resources\D5\MAN\135.png" />
+        <Resource Include="Resources\D5\MAN\136.png" />
+        <Resource Include="Resources\D5\MAN\137.png" />
+        <Resource Include="Resources\D5\MAN\138.png" />
+        <Resource Include="Resources\D5\MAN\139.png" />
+        <Resource Include="Resources\D5\MAN\14.png" />
+        <Resource Include="Resources\D5\MAN\140.png" />
+        <Resource Include="Resources\D5\MAN\141.png" />
+        <Resource Include="Resources\D5\MAN\142.png" />
+        <Resource Include="Resources\D5\MAN\143.png" />
+        <Resource Include="Resources\D5\MAN\144.png" />
+        <Resource Include="Resources\D5\MAN\145.png" />
+        <Resource Include="Resources\D5\MAN\146.png" />
+        <Resource Include="Resources\D5\MAN\147.png" />
+        <Resource Include="Resources\D5\MAN\148.png" />
+        <Resource Include="Resources\D5\MAN\149.png" />
+        <Resource Include="Resources\D5\MAN\15.png" />
+        <Resource Include="Resources\D5\MAN\150.png" />
+        <Resource Include="Resources\D5\MAN\151.png" />
+        <Resource Include="Resources\D5\MAN\152.png" />
+        <Resource Include="Resources\D5\MAN\153.png" />
+        <Resource Include="Resources\D5\MAN\154.png" />
+        <Resource Include="Resources\D5\MAN\155.png" />
+        <Resource Include="Resources\D5\MAN\156.png" />
+        <Resource Include="Resources\D5\MAN\157.png" />
+        <Resource Include="Resources\D5\MAN\158.png" />
+        <Resource Include="Resources\D5\MAN\159.png" />
+        <Resource Include="Resources\D5\MAN\16.png" />
+        <Resource Include="Resources\D5\MAN\160.png" />
+        <Resource Include="Resources\D5\MAN\161.png" />
+        <Resource Include="Resources\D5\MAN\162.png" />
+        <Resource Include="Resources\D5\MAN\163.png" />
+        <Resource Include="Resources\D5\MAN\164.png" />
+        <Resource Include="Resources\D5\MAN\165.png" />
+        <Resource Include="Resources\D5\MAN\166.png" />
+        <Resource Include="Resources\D5\MAN\167.png" />
+        <Resource Include="Resources\D5\MAN\168.png" />
+        <Resource Include="Resources\D5\MAN\169.png" />
+        <Resource Include="Resources\D5\MAN\17.png" />
+        <Resource Include="Resources\D5\MAN\170.png" />
+        <Resource Include="Resources\D5\MAN\171.png" />
+        <Resource Include="Resources\D5\MAN\172.png" />
+        <Resource Include="Resources\D5\MAN\173.png" />
+        <Resource Include="Resources\D5\MAN\174.png" />
+        <Resource Include="Resources\D5\MAN\175.png" />
+        <Resource Include="Resources\D5\MAN\176.png" />
+        <Resource Include="Resources\D5\MAN\177.png" />
+        <Resource Include="Resources\D5\MAN\178.png" />
+        <Resource Include="Resources\D5\MAN\179.png" />
+        <Resource Include="Resources\D5\MAN\18.png" />
+        <Resource Include="Resources\D5\MAN\180.png" />
+        <Resource Include="Resources\D5\MAN\181.png" />
+        <Resource Include="Resources\D5\MAN\182.png" />
+        <Resource Include="Resources\D5\MAN\183.png" />
+        <Resource Include="Resources\D5\MAN\184.png" />
+        <Resource Include="Resources\D5\MAN\185.png" />
+        <Resource Include="Resources\D5\MAN\186.png" />
+        <Resource Include="Resources\D5\MAN\187.png" />
+        <Resource Include="Resources\D5\MAN\188.png" />
+        <Resource Include="Resources\D5\MAN\189.png" />
+        <Resource Include="Resources\D5\MAN\19.png" />
+        <Resource Include="Resources\D5\MAN\190.png" />
+        <Resource Include="Resources\D5\MAN\191.png" />
+        <Resource Include="Resources\D5\MAN\192.png" />
+        <Resource Include="Resources\D5\MAN\193.png" />
+        <Resource Include="Resources\D5\MAN\194.png" />
+        <Resource Include="Resources\D5\MAN\195.png" />
+        <Resource Include="Resources\D5\MAN\196.png" />
+        <Resource Include="Resources\D5\MAN\197.png" />
+        <Resource Include="Resources\D5\MAN\198.png" />
+        <Resource Include="Resources\D5\MAN\199.png" />
+        <Resource Include="Resources\D5\MAN\2.png" />
+        <Resource Include="Resources\D5\MAN\20.png" />
+        <Resource Include="Resources\D5\MAN\200.png" />
+        <Resource Include="Resources\D5\MAN\201.png" />
+        <Resource Include="Resources\D5\MAN\202.png" />
+        <Resource Include="Resources\D5\MAN\203.png" />
+        <Resource Include="Resources\D5\MAN\204.png" />
+        <Resource Include="Resources\D5\MAN\205.png" />
+        <Resource Include="Resources\D5\MAN\206.png" />
+        <Resource Include="Resources\D5\MAN\207.png" />
+        <Resource Include="Resources\D5\MAN\208.png" />
+        <Resource Include="Resources\D5\MAN\209.png" />
+        <Resource Include="Resources\D5\MAN\21.png" />
+        <Resource Include="Resources\D5\MAN\210.png" />
+        <Resource Include="Resources\D5\MAN\211.png" />
+        <Resource Include="Resources\D5\MAN\212.png" />
+        <Resource Include="Resources\D5\MAN\213.png" />
+        <Resource Include="Resources\D5\MAN\214.png" />
+        <Resource Include="Resources\D5\MAN\215.png" />
+        <Resource Include="Resources\D5\MAN\216.png" />
+        <Resource Include="Resources\D5\MAN\217.png" />
+        <Resource Include="Resources\D5\MAN\218.png" />
+        <Resource Include="Resources\D5\MAN\219.png" />
+        <Resource Include="Resources\D5\MAN\22.png" />
+        <Resource Include="Resources\D5\MAN\220.png" />
+        <Resource Include="Resources\D5\MAN\221.png" />
+        <Resource Include="Resources\D5\MAN\222.png" />
+        <Resource Include="Resources\D5\MAN\223.png" />
+        <Resource Include="Resources\D5\MAN\224.png" />
+        <Resource Include="Resources\D5\MAN\225.png" />
+        <Resource Include="Resources\D5\MAN\226.png" />
+        <Resource Include="Resources\D5\MAN\227.png" />
+        <Resource Include="Resources\D5\MAN\228.png" />
+        <Resource Include="Resources\D5\MAN\229.png" />
+        <Resource Include="Resources\D5\MAN\23.png" />
+        <Resource Include="Resources\D5\MAN\230.png" />
+        <Resource Include="Resources\D5\MAN\231.png" />
+        <Resource Include="Resources\D5\MAN\232.png" />
+        <Resource Include="Resources\D5\MAN\233.png" />
+        <Resource Include="Resources\D5\MAN\234.png" />
+        <Resource Include="Resources\D5\MAN\235.png" />
+        <Resource Include="Resources\D5\MAN\236.png" />
+        <Resource Include="Resources\D5\MAN\237.png" />
+        <Resource Include="Resources\D5\MAN\238.png" />
+        <Resource Include="Resources\D5\MAN\239.png" />
+        <Resource Include="Resources\D5\MAN\24.png" />
+        <Resource Include="Resources\D5\MAN\240.png" />
+        <Resource Include="Resources\D5\MAN\241.png" />
+        <Resource Include="Resources\D5\MAN\242.png" />
+        <Resource Include="Resources\D5\MAN\243.png" />
+        <Resource Include="Resources\D5\MAN\244.png" />
+        <Resource Include="Resources\D5\MAN\245.png" />
+        <Resource Include="Resources\D5\MAN\246.png" />
+        <Resource Include="Resources\D5\MAN\247.png" />
+        <Resource Include="Resources\D5\MAN\248.png" />
+        <Resource Include="Resources\D5\MAN\249.png" />
+        <Resource Include="Resources\D5\MAN\25.png" />
+        <Resource Include="Resources\D5\MAN\250.png" />
+        <Resource Include="Resources\D5\MAN\251.png" />
+        <Resource Include="Resources\D5\MAN\252.png" />
+        <Resource Include="Resources\D5\MAN\253.png" />
+        <Resource Include="Resources\D5\MAN\254.png" />
+        <Resource Include="Resources\D5\MAN\255.png" />
+        <Resource Include="Resources\D5\MAN\256.png" />
+        <Resource Include="Resources\D5\MAN\257.png" />
+        <Resource Include="Resources\D5\MAN\258.png" />
+        <Resource Include="Resources\D5\MAN\259.png" />
+        <Resource Include="Resources\D5\MAN\26.png" />
+        <Resource Include="Resources\D5\MAN\260.png" />
+        <Resource Include="Resources\D5\MAN\261.png" />
+        <Resource Include="Resources\D5\MAN\262.png" />
+        <Resource Include="Resources\D5\MAN\263.png" />
+        <Resource Include="Resources\D5\MAN\264.png" />
+        <Resource Include="Resources\D5\MAN\265.png" />
+        <Resource Include="Resources\D5\MAN\266.png" />
+        <Resource Include="Resources\D5\MAN\267.png" />
+        <Resource Include="Resources\D5\MAN\268.png" />
+        <Resource Include="Resources\D5\MAN\269.png" />
+        <Resource Include="Resources\D5\MAN\27.png" />
+        <Resource Include="Resources\D5\MAN\270.png" />
+        <Resource Include="Resources\D5\MAN\271.png" />
+        <Resource Include="Resources\D5\MAN\272.png" />
+        <Resource Include="Resources\D5\MAN\273.png" />
+        <Resource Include="Resources\D5\MAN\274.png" />
+        <Resource Include="Resources\D5\MAN\275.png" />
+        <Resource Include="Resources\D5\MAN\276.png" />
+        <Resource Include="Resources\D5\MAN\277.png" />
+        <Resource Include="Resources\D5\MAN\278.png" />
+        <Resource Include="Resources\D5\MAN\279_fg.png" />
+        <Resource Include="Resources\D5\MAN\28.png" />
+        <Resource Include="Resources\D5\MAN\280_fg.png" />
+        <Resource Include="Resources\D5\MAN\281_fg.png" />
+        <Resource Include="Resources\D5\MAN\282_bg.png" />
+        <Resource Include="Resources\D5\MAN\282_fg.png" />
+        <Resource Include="Resources\D5\MAN\283_bg.png" />
+        <Resource Include="Resources\D5\MAN\283_fg.png" />
+        <Resource Include="Resources\D5\MAN\284_bg.png" />
+        <Resource Include="Resources\D5\MAN\284_fg.png" />
+        <Resource Include="Resources\D5\MAN\285_bg.png" />
+        <Resource Include="Resources\D5\MAN\285_fg.png" />
+        <Resource Include="Resources\D5\MAN\286_bg.png" />
+        <Resource Include="Resources\D5\MAN\286_fg.png" />
+        <Resource Include="Resources\D5\MAN\287_bg.png" />
+        <Resource Include="Resources\D5\MAN\287_fg.png" />
+        <Resource Include="Resources\D5\MAN\288_bg.png" />
+        <Resource Include="Resources\D5\MAN\288_fg.png" />
+        <Resource Include="Resources\D5\MAN\289_bg.png" />
+        <Resource Include="Resources\D5\MAN\289_fg.png" />
+        <Resource Include="Resources\D5\MAN\29.png" />
+        <Resource Include="Resources\D5\MAN\290_fg.png" />
+        <Resource Include="Resources\D5\MAN\291_fg.png" />
+        <Resource Include="Resources\D5\MAN\292_fg.png" />
+        <Resource Include="Resources\D5\MAN\293_fg.png" />
+        <Resource Include="Resources\D5\MAN\294_fg.png" />
+        <Resource Include="Resources\D5\MAN\295_fg.png" />
+        <Resource Include="Resources\D5\MAN\296_fg.png" />
+        <Resource Include="Resources\D5\MAN\297_fg.png" />
+        <Resource Include="Resources\D5\MAN\298_fg.png" />
+        <Resource Include="Resources\D5\MAN\299_fg.png" />
+        <Resource Include="Resources\D5\MAN\3.png" />
+        <Resource Include="Resources\D5\MAN\30.png" />
+        <Resource Include="Resources\D5\MAN\300_fg.png" />
+        <Resource Include="Resources\D5\MAN\301_fg.png" />
+        <Resource Include="Resources\D5\MAN\302_fg.png" />
+        <Resource Include="Resources\D5\MAN\303_fg.png" />
+        <Resource Include="Resources\D5\MAN\304_fg.png" />
+        <Resource Include="Resources\D5\MAN\305_fg.png" />
+        <Resource Include="Resources\D5\MAN\306_fg.png" />
+        <Resource Include="Resources\D5\MAN\307_fg.png" />
+        <Resource Include="Resources\D5\MAN\308_fg.png" />
+        <Resource Include="Resources\D5\MAN\309_fg.png" />
+        <Resource Include="Resources\D5\MAN\31.png" />
+        <Resource Include="Resources\D5\MAN\310_fg.png" />
+        <Resource Include="Resources\D5\MAN\311_fg.png" />
+        <Resource Include="Resources\D5\MAN\312_fg.png" />
+        <Resource Include="Resources\D5\MAN\313_fg.png" />
+        <Resource Include="Resources\D5\MAN\314_fg.png" />
+        <Resource Include="Resources\D5\MAN\315_bg.png" />
+        <Resource Include="Resources\D5\MAN\315_fg.png" />
+        <Resource Include="Resources\D5\MAN\316_bg.png" />
+        <Resource Include="Resources\D5\MAN\316_fg.png" />
+        <Resource Include="Resources\D5\MAN\317_bg.png" />
+        <Resource Include="Resources\D5\MAN\317_fg.png" />
+        <Resource Include="Resources\D5\MAN\318_bg.png" />
+        <Resource Include="Resources\D5\MAN\318_fg.png" />
+        <Resource Include="Resources\D5\MAN\319_bg.png" />
+        <Resource Include="Resources\D5\MAN\319_fg.png" />
+        <Resource Include="Resources\D5\MAN\32.png" />
+        <Resource Include="Resources\D5\MAN\320_bg.png" />
+        <Resource Include="Resources\D5\MAN\320_fg.png" />
+        <Resource Include="Resources\D5\MAN\321_bg.png" />
+        <Resource Include="Resources\D5\MAN\321_fg.png" />
+        <Resource Include="Resources\D5\MAN\322_bg.png" />
+        <Resource Include="Resources\D5\MAN\322_fg.png" />
+        <Resource Include="Resources\D5\MAN\323_bg.png" />
+        <Resource Include="Resources\D5\MAN\323_fg.png" />
+        <Resource Include="Resources\D5\MAN\324_bg.png" />
+        <Resource Include="Resources\D5\MAN\324_fg.png" />
+        <Resource Include="Resources\D5\MAN\325_bg.png" />
+        <Resource Include="Resources\D5\MAN\325_fg.png" />
+        <Resource Include="Resources\D5\MAN\326_bg.png" />
+        <Resource Include="Resources\D5\MAN\326_fg.png" />
+        <Resource Include="Resources\D5\MAN\327_fg.png" />
+        <Resource Include="Resources\D5\MAN\328_fg.png" />
+        <Resource Include="Resources\D5\MAN\329_fg.png" />
+        <Resource Include="Resources\D5\MAN\33.png" />
+        <Resource Include="Resources\D5\MAN\330_fg.png" />
+        <Resource Include="Resources\D5\MAN\331_fg.png" />
+        <Resource Include="Resources\D5\MAN\332_fg.png" />
+        <Resource Include="Resources\D5\MAN\333_fg.png" />
+        <Resource Include="Resources\D5\MAN\334_fg.png" />
+        <Resource Include="Resources\D5\MAN\335_fg.png" />
+        <Resource Include="Resources\D5\MAN\336_fg.png" />
+        <Resource Include="Resources\D5\MAN\337_fg.png" />
+        <Resource Include="Resources\D5\MAN\338_fg.png" />
+        <Resource Include="Resources\D5\MAN\339_fg.png" />
+        <Resource Include="Resources\D5\MAN\34.png" />
+        <Resource Include="Resources\D5\MAN\340_fg.png" />
+        <Resource Include="Resources\D5\MAN\341_fg.png" />
+        <Resource Include="Resources\D5\MAN\342_fg.png" />
+        <Resource Include="Resources\D5\MAN\343_bg.png" />
+        <Resource Include="Resources\D5\MAN\343_fg.png" />
+        <Resource Include="Resources\D5\MAN\344_bg.png" />
+        <Resource Include="Resources\D5\MAN\344_fg.png" />
+        <Resource Include="Resources\D5\MAN\345_bg.png" />
+        <Resource Include="Resources\D5\MAN\345_fg.png" />
+        <Resource Include="Resources\D5\MAN\346_bg.png" />
+        <Resource Include="Resources\D5\MAN\346_fg.png" />
+        <Resource Include="Resources\D5\MAN\347_bg.png" />
+        <Resource Include="Resources\D5\MAN\347_fg.png" />
+        <Resource Include="Resources\D5\MAN\348_bg.png" />
+        <Resource Include="Resources\D5\MAN\348_fg.png" />
+        <Resource Include="Resources\D5\MAN\349_bg.png" />
+        <Resource Include="Resources\D5\MAN\349_fg.png" />
+        <Resource Include="Resources\D5\MAN\35.png" />
+        <Resource Include="Resources\D5\MAN\350_bg.png" />
+        <Resource Include="Resources\D5\MAN\350_fg.png" />
+        <Resource Include="Resources\D5\MAN\351_fg.png" />
+        <Resource Include="Resources\D5\MAN\352_fg.png" />
+        <Resource Include="Resources\D5\MAN\353_fg.png" />
+        <Resource Include="Resources\D5\MAN\354_fg.png" />
+        <Resource Include="Resources\D5\MAN\355_fg.png" />
+        <Resource Include="Resources\D5\MAN\356_fg.png" />
+        <Resource Include="Resources\D5\MAN\357_fg.png" />
+        <Resource Include="Resources\D5\MAN\358_fg.png" />
+        <Resource Include="Resources\D5\MAN\359_fg.png" />
+        <Resource Include="Resources\D5\MAN\36.png" />
+        <Resource Include="Resources\D5\MAN\360_fg.png" />
+        <Resource Include="Resources\D5\MAN\361_fg.png" />
+        <Resource Include="Resources\D5\MAN\362_fg.png" />
+        <Resource Include="Resources\D5\MAN\363_fg.png" />
+        <Resource Include="Resources\D5\MAN\364_fg.png" />
+        <Resource Include="Resources\D5\MAN\365_fg.png" />
+        <Resource Include="Resources\D5\MAN\366_fg.png" />
+        <Resource Include="Resources\D5\MAN\367_fg.png" />
+        <Resource Include="Resources\D5\MAN\368_fg.png" />
+        <Resource Include="Resources\D5\MAN\369_fg.png" />
+        <Resource Include="Resources\D5\MAN\37.png" />
+        <Resource Include="Resources\D5\MAN\370_fg.png" />
+        <Resource Include="Resources\D5\MAN\371_bg.png" />
+        <Resource Include="Resources\D5\MAN\371_fg.png" />
+        <Resource Include="Resources\D5\MAN\372_bg.png" />
+        <Resource Include="Resources\D5\MAN\372_fg.png" />
+        <Resource Include="Resources\D5\MAN\373_bg.png" />
+        <Resource Include="Resources\D5\MAN\373_fg.png" />
+        <Resource Include="Resources\D5\MAN\374_bg.png" />
+        <Resource Include="Resources\D5\MAN\374_fg.png" />
+        <Resource Include="Resources\D5\MAN\375_bg.png" />
+        <Resource Include="Resources\D5\MAN\375_fg.png" />
+        <Resource Include="Resources\D5\MAN\376_bg.png" />
+        <Resource Include="Resources\D5\MAN\376_fg.png" />
+        <Resource Include="Resources\D5\MAN\377_bg.png" />
+        <Resource Include="Resources\D5\MAN\377_fg.png" />
+        <Resource Include="Resources\D5\MAN\378_bg.png" />
+        <Resource Include="Resources\D5\MAN\378_fg.png" />
+        <Resource Include="Resources\D5\MAN\379_fg.png" />
+        <Resource Include="Resources\D5\MAN\38.png" />
+        <Resource Include="Resources\D5\MAN\380_fg.png" />
+        <Resource Include="Resources\D5\MAN\381_fg.png" />
+        <Resource Include="Resources\D5\MAN\382_fg.png" />
+        <Resource Include="Resources\D5\MAN\383_bg.png" />
+        <Resource Include="Resources\D5\MAN\383_fg.png" />
+        <Resource Include="Resources\D5\MAN\384_bg.png" />
+        <Resource Include="Resources\D5\MAN\384_fg.png" />
+        <Resource Include="Resources\D5\MAN\385_bg.png" />
+        <Resource Include="Resources\D5\MAN\385_fg.png" />
+        <Resource Include="Resources\D5\MAN\386_bg.png" />
+        <Resource Include="Resources\D5\MAN\386_fg.png" />
+        <Resource Include="Resources\D5\MAN\387_fg.png" />
+        <Resource Include="Resources\D5\MAN\388_fg.png" />
+        <Resource Include="Resources\D5\MAN\389_fg.png" />
+        <Resource Include="Resources\D5\MAN\39.png" />
+        <Resource Include="Resources\D5\MAN\390_fg.png" />
+        <Resource Include="Resources\D5\MAN\4.png" />
+        <Resource Include="Resources\D5\MAN\40.png" />
+        <Resource Include="Resources\D5\MAN\41.png" />
+        <Resource Include="Resources\D5\MAN\42.png" />
+        <Resource Include="Resources\D5\MAN\43.png" />
+        <Resource Include="Resources\D5\MAN\44.png" />
+        <Resource Include="Resources\D5\MAN\45.png" />
+        <Resource Include="Resources\D5\MAN\46.png" />
+        <Resource Include="Resources\D5\MAN\47.png" />
+        <Resource Include="Resources\D5\MAN\48.png" />
+        <Resource Include="Resources\D5\MAN\49.png" />
+        <Resource Include="Resources\D5\MAN\5.png" />
+        <Resource Include="Resources\D5\MAN\50.png" />
+        <Resource Include="Resources\D5\MAN\51.png" />
+        <Resource Include="Resources\D5\MAN\52.png" />
+        <Resource Include="Resources\D5\MAN\53.png" />
+        <Resource Include="Resources\D5\MAN\54.png" />
+        <Resource Include="Resources\D5\MAN\55.png" />
+        <Resource Include="Resources\D5\MAN\56.png" />
+        <Resource Include="Resources\D5\MAN\57.png" />
+        <Resource Include="Resources\D5\MAN\58.png" />
+        <Resource Include="Resources\D5\MAN\59.png" />
+        <Resource Include="Resources\D5\MAN\6.png" />
+        <Resource Include="Resources\D5\MAN\60.png" />
+        <Resource Include="Resources\D5\MAN\61.png" />
+        <Resource Include="Resources\D5\MAN\62.png" />
+        <Resource Include="Resources\D5\MAN\63.png" />
+        <Resource Include="Resources\D5\MAN\64.png" />
+        <Resource Include="Resources\D5\MAN\65.png" />
+        <Resource Include="Resources\D5\MAN\66.png" />
+        <Resource Include="Resources\D5\MAN\67.png" />
+        <Resource Include="Resources\D5\MAN\68.png" />
+        <Resource Include="Resources\D5\MAN\69.png" />
+        <Resource Include="Resources\D5\MAN\7.png" />
+        <Resource Include="Resources\D5\MAN\70.png" />
+        <Resource Include="Resources\D5\MAN\71.png" />
+        <Resource Include="Resources\D5\MAN\72.png" />
+        <Resource Include="Resources\D5\MAN\73.png" />
+        <Resource Include="Resources\D5\MAN\74.png" />
+        <Resource Include="Resources\D5\MAN\75.png" />
+        <Resource Include="Resources\D5\MAN\76.png" />
+        <Resource Include="Resources\D5\MAN\77.png" />
+        <Resource Include="Resources\D5\MAN\78.png" />
+        <Resource Include="Resources\D5\MAN\79.png" />
+        <Resource Include="Resources\D5\MAN\8.png" />
+        <Resource Include="Resources\D5\MAN\80.png" />
+        <Resource Include="Resources\D5\MAN\81.png" />
+        <Resource Include="Resources\D5\MAN\82.png" />
+        <Resource Include="Resources\D5\MAN\83.png" />
+        <Resource Include="Resources\D5\MAN\84.png" />
+        <Resource Include="Resources\D5\MAN\85.png" />
+        <Resource Include="Resources\D5\MAN\86.png" />
+        <Resource Include="Resources\D5\MAN\87.png" />
+        <Resource Include="Resources\D5\MAN\88.png" />
+        <Resource Include="Resources\D5\MAN\89.png" />
+        <Resource Include="Resources\D5\MAN\9.png" />
+        <Resource Include="Resources\D5\MAN\90.png" />
+        <Resource Include="Resources\D5\MAN\91.png" />
+        <Resource Include="Resources\D5\MAN\92.png" />
+        <Resource Include="Resources\D5\MAN\93.png" />
+        <Resource Include="Resources\D5\MAN\94.png" />
+        <Resource Include="Resources\D5\MAN\95.png" />
+        <Resource Include="Resources\D5\MAN\96.png" />
+        <Resource Include="Resources\D5\MAN\97.png" />
+        <Resource Include="Resources\D5\MAN\98.png" />
+        <Resource Include="Resources\D5\MAN\99.png" />
+        <Resource Include="Resources\D5\WMN\1.png" />
+        <Resource Include="Resources\D5\WMN\10.png" />
+        <Resource Include="Resources\D5\WMN\100.png" />
+        <Resource Include="Resources\D5\WMN\101.png" />
+        <Resource Include="Resources\D5\WMN\102.png" />
+        <Resource Include="Resources\D5\WMN\103.png" />
+        <Resource Include="Resources\D5\WMN\104.png" />
+        <Resource Include="Resources\D5\WMN\105.png" />
+        <Resource Include="Resources\D5\WMN\106.png" />
+        <Resource Include="Resources\D5\WMN\107.png" />
+        <Resource Include="Resources\D5\WMN\108.png" />
+        <Resource Include="Resources\D5\WMN\109.png" />
+        <Resource Include="Resources\D5\WMN\11.png" />
+        <Resource Include="Resources\D5\WMN\110.png" />
+        <Resource Include="Resources\D5\WMN\111.png" />
+        <Resource Include="Resources\D5\WMN\112.png" />
+        <Resource Include="Resources\D5\WMN\113.png" />
+        <Resource Include="Resources\D5\WMN\114.png" />
+        <Resource Include="Resources\D5\WMN\115.png" />
+        <Resource Include="Resources\D5\WMN\116.png" />
+        <Resource Include="Resources\D5\WMN\117.png" />
+        <Resource Include="Resources\D5\WMN\118.png" />
+        <Resource Include="Resources\D5\WMN\119.png" />
+        <Resource Include="Resources\D5\WMN\12.png" />
+        <Resource Include="Resources\D5\WMN\120.png" />
+        <Resource Include="Resources\D5\WMN\121.png" />
+        <Resource Include="Resources\D5\WMN\122.png" />
+        <Resource Include="Resources\D5\WMN\123.png" />
+        <Resource Include="Resources\D5\WMN\124.png" />
+        <Resource Include="Resources\D5\WMN\125.png" />
+        <Resource Include="Resources\D5\WMN\126.png" />
+        <Resource Include="Resources\D5\WMN\127.png" />
+        <Resource Include="Resources\D5\WMN\128.png" />
+        <Resource Include="Resources\D5\WMN\129.png" />
+        <Resource Include="Resources\D5\WMN\13.png" />
+        <Resource Include="Resources\D5\WMN\130.png" />
+        <Resource Include="Resources\D5\WMN\131.png" />
+        <Resource Include="Resources\D5\WMN\132.png" />
+        <Resource Include="Resources\D5\WMN\133.png" />
+        <Resource Include="Resources\D5\WMN\134.png" />
+        <Resource Include="Resources\D5\WMN\135.png" />
+        <Resource Include="Resources\D5\WMN\136.png" />
+        <Resource Include="Resources\D5\WMN\137.png" />
+        <Resource Include="Resources\D5\WMN\138.png" />
+        <Resource Include="Resources\D5\WMN\139.png" />
+        <Resource Include="Resources\D5\WMN\14.png" />
+        <Resource Include="Resources\D5\WMN\140.png" />
+        <Resource Include="Resources\D5\WMN\141.png" />
+        <Resource Include="Resources\D5\WMN\142.png" />
+        <Resource Include="Resources\D5\WMN\143.png" />
+        <Resource Include="Resources\D5\WMN\144.png" />
+        <Resource Include="Resources\D5\WMN\145.png" />
+        <Resource Include="Resources\D5\WMN\146.png" />
+        <Resource Include="Resources\D5\WMN\147.png" />
+        <Resource Include="Resources\D5\WMN\148.png" />
+        <Resource Include="Resources\D5\WMN\149.png" />
+        <Resource Include="Resources\D5\WMN\15.png" />
+        <Resource Include="Resources\D5\WMN\150.png" />
+        <Resource Include="Resources\D5\WMN\151.png" />
+        <Resource Include="Resources\D5\WMN\152.png" />
+        <Resource Include="Resources\D5\WMN\153.png" />
+        <Resource Include="Resources\D5\WMN\154.png" />
+        <Resource Include="Resources\D5\WMN\155.png" />
+        <Resource Include="Resources\D5\WMN\156.png" />
+        <Resource Include="Resources\D5\WMN\157.png" />
+        <Resource Include="Resources\D5\WMN\158.png" />
+        <Resource Include="Resources\D5\WMN\159.png" />
+        <Resource Include="Resources\D5\WMN\16.png" />
+        <Resource Include="Resources\D5\WMN\160.png" />
+        <Resource Include="Resources\D5\WMN\161.png" />
+        <Resource Include="Resources\D5\WMN\162.png" />
+        <Resource Include="Resources\D5\WMN\163.png" />
+        <Resource Include="Resources\D5\WMN\164.png" />
+        <Resource Include="Resources\D5\WMN\165.png" />
+        <Resource Include="Resources\D5\WMN\166.png" />
+        <Resource Include="Resources\D5\WMN\167.png" />
+        <Resource Include="Resources\D5\WMN\168.png" />
+        <Resource Include="Resources\D5\WMN\169.png" />
+        <Resource Include="Resources\D5\WMN\17.png" />
+        <Resource Include="Resources\D5\WMN\170.png" />
+        <Resource Include="Resources\D5\WMN\171.png" />
+        <Resource Include="Resources\D5\WMN\172.png" />
+        <Resource Include="Resources\D5\WMN\173.png" />
+        <Resource Include="Resources\D5\WMN\174.png" />
+        <Resource Include="Resources\D5\WMN\175.png" />
+        <Resource Include="Resources\D5\WMN\176.png" />
+        <Resource Include="Resources\D5\WMN\177.png" />
+        <Resource Include="Resources\D5\WMN\178.png" />
+        <Resource Include="Resources\D5\WMN\179.png" />
+        <Resource Include="Resources\D5\WMN\18.png" />
+        <Resource Include="Resources\D5\WMN\180.png" />
+        <Resource Include="Resources\D5\WMN\181.png" />
+        <Resource Include="Resources\D5\WMN\182.png" />
+        <Resource Include="Resources\D5\WMN\183.png" />
+        <Resource Include="Resources\D5\WMN\184.png" />
+        <Resource Include="Resources\D5\WMN\185.png" />
+        <Resource Include="Resources\D5\WMN\186.png" />
+        <Resource Include="Resources\D5\WMN\187.png" />
+        <Resource Include="Resources\D5\WMN\188.png" />
+        <Resource Include="Resources\D5\WMN\189.png" />
+        <Resource Include="Resources\D5\WMN\19.png" />
+        <Resource Include="Resources\D5\WMN\190.png" />
+        <Resource Include="Resources\D5\WMN\191.png" />
+        <Resource Include="Resources\D5\WMN\192.png" />
+        <Resource Include="Resources\D5\WMN\193.png" />
+        <Resource Include="Resources\D5\WMN\194.png" />
+        <Resource Include="Resources\D5\WMN\195.png" />
+        <Resource Include="Resources\D5\WMN\196.png" />
+        <Resource Include="Resources\D5\WMN\197.png" />
+        <Resource Include="Resources\D5\WMN\198.png" />
+        <Resource Include="Resources\D5\WMN\199.png" />
+        <Resource Include="Resources\D5\WMN\2.png" />
+        <Resource Include="Resources\D5\WMN\20.png" />
+        <Resource Include="Resources\D5\WMN\200.png" />
+        <Resource Include="Resources\D5\WMN\201.png" />
+        <Resource Include="Resources\D5\WMN\202.png" />
+        <Resource Include="Resources\D5\WMN\203.png" />
+        <Resource Include="Resources\D5\WMN\204.png" />
+        <Resource Include="Resources\D5\WMN\205.png" />
+        <Resource Include="Resources\D5\WMN\206.png" />
+        <Resource Include="Resources\D5\WMN\207.png" />
+        <Resource Include="Resources\D5\WMN\208.png" />
+        <Resource Include="Resources\D5\WMN\209.png" />
+        <Resource Include="Resources\D5\WMN\21.png" />
+        <Resource Include="Resources\D5\WMN\210.png" />
+        <Resource Include="Resources\D5\WMN\211.png" />
+        <Resource Include="Resources\D5\WMN\212.png" />
+        <Resource Include="Resources\D5\WMN\213.png" />
+        <Resource Include="Resources\D5\WMN\214.png" />
+        <Resource Include="Resources\D5\WMN\215.png" />
+        <Resource Include="Resources\D5\WMN\216.png" />
+        <Resource Include="Resources\D5\WMN\217.png" />
+        <Resource Include="Resources\D5\WMN\218.png" />
+        <Resource Include="Resources\D5\WMN\219.png" />
+        <Resource Include="Resources\D5\WMN\22.png" />
+        <Resource Include="Resources\D5\WMN\220.png" />
+        <Resource Include="Resources\D5\WMN\221.png" />
+        <Resource Include="Resources\D5\WMN\222.png" />
+        <Resource Include="Resources\D5\WMN\223.png" />
+        <Resource Include="Resources\D5\WMN\224.png" />
+        <Resource Include="Resources\D5\WMN\225.png" />
+        <Resource Include="Resources\D5\WMN\226.png" />
+        <Resource Include="Resources\D5\WMN\227.png" />
+        <Resource Include="Resources\D5\WMN\228.png" />
+        <Resource Include="Resources\D5\WMN\229.png" />
+        <Resource Include="Resources\D5\WMN\23.png" />
+        <Resource Include="Resources\D5\WMN\230.png" />
+        <Resource Include="Resources\D5\WMN\231.png" />
+        <Resource Include="Resources\D5\WMN\232.png" />
+        <Resource Include="Resources\D5\WMN\233.png" />
+        <Resource Include="Resources\D5\WMN\234.png" />
+        <Resource Include="Resources\D5\WMN\235.png" />
+        <Resource Include="Resources\D5\WMN\236.png" />
+        <Resource Include="Resources\D5\WMN\237.png" />
+        <Resource Include="Resources\D5\WMN\238.png" />
+        <Resource Include="Resources\D5\WMN\239.png" />
+        <Resource Include="Resources\D5\WMN\24.png" />
+        <Resource Include="Resources\D5\WMN\240.png" />
+        <Resource Include="Resources\D5\WMN\241.png" />
+        <Resource Include="Resources\D5\WMN\242.png" />
+        <Resource Include="Resources\D5\WMN\243.png" />
+        <Resource Include="Resources\D5\WMN\244.png" />
+        <Resource Include="Resources\D5\WMN\245.png" />
+        <Resource Include="Resources\D5\WMN\246.png" />
+        <Resource Include="Resources\D5\WMN\247.png" />
+        <Resource Include="Resources\D5\WMN\248.png" />
+        <Resource Include="Resources\D5\WMN\249.png" />
+        <Resource Include="Resources\D5\WMN\25.png" />
+        <Resource Include="Resources\D5\WMN\250.png" />
+        <Resource Include="Resources\D5\WMN\251.png" />
+        <Resource Include="Resources\D5\WMN\252.png" />
+        <Resource Include="Resources\D5\WMN\253.png" />
+        <Resource Include="Resources\D5\WMN\254.png" />
+        <Resource Include="Resources\D5\WMN\255.png" />
+        <Resource Include="Resources\D5\WMN\256.png" />
+        <Resource Include="Resources\D5\WMN\257.png" />
+        <Resource Include="Resources\D5\WMN\258.png" />
+        <Resource Include="Resources\D5\WMN\259.png" />
+        <Resource Include="Resources\D5\WMN\26.png" />
+        <Resource Include="Resources\D5\WMN\260.png" />
+        <Resource Include="Resources\D5\WMN\261.png" />
+        <Resource Include="Resources\D5\WMN\262.png" />
+        <Resource Include="Resources\D5\WMN\263.png" />
+        <Resource Include="Resources\D5\WMN\264.png" />
+        <Resource Include="Resources\D5\WMN\265.png" />
+        <Resource Include="Resources\D5\WMN\266.png" />
+        <Resource Include="Resources\D5\WMN\267.png" />
+        <Resource Include="Resources\D5\WMN\268.png" />
+        <Resource Include="Resources\D5\WMN\269.png" />
+        <Resource Include="Resources\D5\WMN\27.png" />
+        <Resource Include="Resources\D5\WMN\270.png" />
+        <Resource Include="Resources\D5\WMN\271_bg.png" />
+        <Resource Include="Resources\D5\WMN\271_fg.png" />
+        <Resource Include="Resources\D5\WMN\272_bg.png" />
+        <Resource Include="Resources\D5\WMN\272_fg.png" />
+        <Resource Include="Resources\D5\WMN\273_bg.png" />
+        <Resource Include="Resources\D5\WMN\273_fg.png" />
+        <Resource Include="Resources\D5\WMN\274_bg.png" />
+        <Resource Include="Resources\D5\WMN\274_fg.png" />
+        <Resource Include="Resources\D5\WMN\275_bg.png" />
+        <Resource Include="Resources\D5\WMN\275_fg.png" />
+        <Resource Include="Resources\D5\WMN\276_bg.png" />
+        <Resource Include="Resources\D5\WMN\276_fg.png" />
+        <Resource Include="Resources\D5\WMN\277_bg.png" />
+        <Resource Include="Resources\D5\WMN\277_fg.png" />
+        <Resource Include="Resources\D5\WMN\278_bg.png" />
+        <Resource Include="Resources\D5\WMN\278_fg.png" />
+        <Resource Include="Resources\D5\WMN\279_bg.png" />
+        <Resource Include="Resources\D5\WMN\279_fg.png" />
+        <Resource Include="Resources\D5\WMN\28.png" />
+        <Resource Include="Resources\D5\WMN\280_bg.png" />
+        <Resource Include="Resources\D5\WMN\280_fg.png" />
+        <Resource Include="Resources\D5\WMN\281_bg.png" />
+        <Resource Include="Resources\D5\WMN\281_fg.png" />
+        <Resource Include="Resources\D5\WMN\282_bg.png" />
+        <Resource Include="Resources\D5\WMN\282_fg.png" />
+        <Resource Include="Resources\D5\WMN\283_bg.png" />
+        <Resource Include="Resources\D5\WMN\283_fg.png" />
+        <Resource Include="Resources\D5\WMN\284_bg.png" />
+        <Resource Include="Resources\D5\WMN\284_fg.png" />
+        <Resource Include="Resources\D5\WMN\285_bg.png" />
+        <Resource Include="Resources\D5\WMN\285_fg.png" />
+        <Resource Include="Resources\D5\WMN\286_bg.png" />
+        <Resource Include="Resources\D5\WMN\286_fg.png" />
+        <Resource Include="Resources\D5\WMN\287_bg.png" />
+        <Resource Include="Resources\D5\WMN\287_fg.png" />
+        <Resource Include="Resources\D5\WMN\288_bg.png" />
+        <Resource Include="Resources\D5\WMN\288_fg.png" />
+        <Resource Include="Resources\D5\WMN\289_bg.png" />
+        <Resource Include="Resources\D5\WMN\289_fg.png" />
+        <Resource Include="Resources\D5\WMN\29.png" />
+        <Resource Include="Resources\D5\WMN\290_bg.png" />
+        <Resource Include="Resources\D5\WMN\290_fg.png" />
+        <Resource Include="Resources\D5\WMN\291_bg.png" />
+        <Resource Include="Resources\D5\WMN\291_fg.png" />
+        <Resource Include="Resources\D5\WMN\292_fg.png" />
+        <Resource Include="Resources\D5\WMN\293_fg.png" />
+        <Resource Include="Resources\D5\WMN\294_fg.png" />
+        <Resource Include="Resources\D5\WMN\295_fg.png" />
+        <Resource Include="Resources\D5\WMN\296_fg.png" />
+        <Resource Include="Resources\D5\WMN\297_bg.png" />
+        <Resource Include="Resources\D5\WMN\297_fg.png" />
+        <Resource Include="Resources\D5\WMN\298_bg.png" />
+        <Resource Include="Resources\D5\WMN\298_fg.png" />
+        <Resource Include="Resources\D5\WMN\299_bg.png" />
+        <Resource Include="Resources\D5\WMN\299_fg.png" />
+        <Resource Include="Resources\D5\WMN\3.png" />
+        <Resource Include="Resources\D5\WMN\30.png" />
+        <Resource Include="Resources\D5\WMN\300_bg.png" />
+        <Resource Include="Resources\D5\WMN\300_fg.png" />
+        <Resource Include="Resources\D5\WMN\301_fg.png" />
+        <Resource Include="Resources\D5\WMN\302_fg.png" />
+        <Resource Include="Resources\D5\WMN\303_fg.png" />
+        <Resource Include="Resources\D5\WMN\304_fg.png" />
+        <Resource Include="Resources\D5\WMN\305_bg.png" />
+        <Resource Include="Resources\D5\WMN\305_fg.png" />
+        <Resource Include="Resources\D5\WMN\306_bg.png" />
+        <Resource Include="Resources\D5\WMN\306_fg.png" />
+        <Resource Include="Resources\D5\WMN\307_bg.png" />
+        <Resource Include="Resources\D5\WMN\307_fg.png" />
+        <Resource Include="Resources\D5\WMN\308_bg.png" />
+        <Resource Include="Resources\D5\WMN\308_fg.png" />
+        <Resource Include="Resources\D5\WMN\309_bg.png" />
+        <Resource Include="Resources\D5\WMN\309_fg.png" />
+        <Resource Include="Resources\D5\WMN\31.png" />
+        <Resource Include="Resources\D5\WMN\310_bg.png" />
+        <Resource Include="Resources\D5\WMN\310_fg.png" />
+        <Resource Include="Resources\D5\WMN\311_bg.png" />
+        <Resource Include="Resources\D5\WMN\311_fg.png" />
+        <Resource Include="Resources\D5\WMN\312_bg.png" />
+        <Resource Include="Resources\D5\WMN\312_fg.png" />
+        <Resource Include="Resources\D5\WMN\313_bg.png" />
+        <Resource Include="Resources\D5\WMN\313_fg.png" />
+        <Resource Include="Resources\D5\WMN\314_bg.png" />
+        <Resource Include="Resources\D5\WMN\314_fg.png" />
+        <Resource Include="Resources\D5\WMN\315_bg.png" />
+        <Resource Include="Resources\D5\WMN\315_fg.png" />
+        <Resource Include="Resources\D5\WMN\316_bg.png" />
+        <Resource Include="Resources\D5\WMN\316_fg.png" />
+        <Resource Include="Resources\D5\WMN\317_bg.png" />
+        <Resource Include="Resources\D5\WMN\317_fg.png" />
+        <Resource Include="Resources\D5\WMN\318_bg.png" />
+        <Resource Include="Resources\D5\WMN\318_fg.png" />
+        <Resource Include="Resources\D5\WMN\319_bg.png" />
+        <Resource Include="Resources\D5\WMN\319_fg.png" />
+        <Resource Include="Resources\D5\WMN\32.png" />
+        <Resource Include="Resources\D5\WMN\320_bg.png" />
+        <Resource Include="Resources\D5\WMN\320_fg.png" />
+        <Resource Include="Resources\D5\WMN\321_bg.png" />
+        <Resource Include="Resources\D5\WMN\321_fg.png" />
+        <Resource Include="Resources\D5\WMN\322_bg.png" />
+        <Resource Include="Resources\D5\WMN\322_fg.png" />
+        <Resource Include="Resources\D5\WMN\323_bg.png" />
+        <Resource Include="Resources\D5\WMN\323_fg.png" />
+        <Resource Include="Resources\D5\WMN\324_bg.png" />
+        <Resource Include="Resources\D5\WMN\324_fg.png" />
+        <Resource Include="Resources\D5\WMN\325_bg.png" />
+        <Resource Include="Resources\D5\WMN\325_fg.png" />
+        <Resource Include="Resources\D5\WMN\326_bg.png" />
+        <Resource Include="Resources\D5\WMN\326_fg.png" />
+        <Resource Include="Resources\D5\WMN\327_bg.png" />
+        <Resource Include="Resources\D5\WMN\327_fg.png" />
+        <Resource Include="Resources\D5\WMN\328_bg.png" />
+        <Resource Include="Resources\D5\WMN\328_fg.png" />
+        <Resource Include="Resources\D5\WMN\329_bg.png" />
+        <Resource Include="Resources\D5\WMN\329_fg.png" />
+        <Resource Include="Resources\D5\WMN\33.png" />
+        <Resource Include="Resources\D5\WMN\330_bg.png" />
+        <Resource Include="Resources\D5\WMN\330_fg.png" />
+        <Resource Include="Resources\D5\WMN\331_bg.png" />
+        <Resource Include="Resources\D5\WMN\331_fg.png" />
+        <Resource Include="Resources\D5\WMN\332_bg.png" />
+        <Resource Include="Resources\D5\WMN\332_fg.png" />
+        <Resource Include="Resources\D5\WMN\333_bg.png" />
+        <Resource Include="Resources\D5\WMN\333_fg.png" />
+        <Resource Include="Resources\D5\WMN\334_bg.png" />
+        <Resource Include="Resources\D5\WMN\334_fg.png" />
+        <Resource Include="Resources\D5\WMN\335_bg.png" />
+        <Resource Include="Resources\D5\WMN\335_fg.png" />
+        <Resource Include="Resources\D5\WMN\336_bg.png" />
+        <Resource Include="Resources\D5\WMN\336_fg.png" />
+        <Resource Include="Resources\D5\WMN\337_fg.png" />
+        <Resource Include="Resources\D5\WMN\338_fg.png" />
+        <Resource Include="Resources\D5\WMN\339_fg.png" />
+        <Resource Include="Resources\D5\WMN\34.png" />
+        <Resource Include="Resources\D5\WMN\340_fg.png" />
+        <Resource Include="Resources\D5\WMN\341_bg.png" />
+        <Resource Include="Resources\D5\WMN\341_fg.png" />
+        <Resource Include="Resources\D5\WMN\342_bg.png" />
+        <Resource Include="Resources\D5\WMN\342_fg.png" />
+        <Resource Include="Resources\D5\WMN\343_bg.png" />
+        <Resource Include="Resources\D5\WMN\343_fg.png" />
+        <Resource Include="Resources\D5\WMN\344_bg.png" />
+        <Resource Include="Resources\D5\WMN\344_fg.png" />
+        <Resource Include="Resources\D5\WMN\345_fg.png" />
+        <Resource Include="Resources\D5\WMN\346_fg.png" />
+        <Resource Include="Resources\D5\WMN\347_fg.png" />
+        <Resource Include="Resources\D5\WMN\348_fg.png" />
+        <Resource Include="Resources\D5\WMN\349_bg.png" />
+        <Resource Include="Resources\D5\WMN\349_fg.png" />
+        <Resource Include="Resources\D5\WMN\35.png" />
+        <Resource Include="Resources\D5\WMN\350_bg.png" />
+        <Resource Include="Resources\D5\WMN\350_fg.png" />
+        <Resource Include="Resources\D5\WMN\351_bg.png" />
+        <Resource Include="Resources\D5\WMN\351_fg.png" />
+        <Resource Include="Resources\D5\WMN\352_bg.png" />
+        <Resource Include="Resources\D5\WMN\352_fg.png" />
+        <Resource Include="Resources\D5\WMN\353_bg.png" />
+        <Resource Include="Resources\D5\WMN\353_fg.png" />
+        <Resource Include="Resources\D5\WMN\354_bg.png" />
+        <Resource Include="Resources\D5\WMN\354_fg.png" />
+        <Resource Include="Resources\D5\WMN\355_bg.png" />
+        <Resource Include="Resources\D5\WMN\355_fg.png" />
+        <Resource Include="Resources\D5\WMN\356_bg.png" />
+        <Resource Include="Resources\D5\WMN\356_fg.png" />
+        <Resource Include="Resources\D5\WMN\357_bg.png" />
+        <Resource Include="Resources\D5\WMN\357_fg.png" />
+        <Resource Include="Resources\D5\WMN\358_bg.png" />
+        <Resource Include="Resources\D5\WMN\358_fg.png" />
+        <Resource Include="Resources\D5\WMN\359_bg.png" />
+        <Resource Include="Resources\D5\WMN\359_fg.png" />
+        <Resource Include="Resources\D5\WMN\36.png" />
+        <Resource Include="Resources\D5\WMN\360_bg.png" />
+        <Resource Include="Resources\D5\WMN\360_fg.png" />
+        <Resource Include="Resources\D5\WMN\361_fg.png" />
+        <Resource Include="Resources\D5\WMN\362_fg.png" />
+        <Resource Include="Resources\D5\WMN\363_fg.png" />
+        <Resource Include="Resources\D5\WMN\364_fg.png" />
+        <Resource Include="Resources\D5\WMN\365_bg.png" />
+        <Resource Include="Resources\D5\WMN\365_fg.png" />
+        <Resource Include="Resources\D5\WMN\366_bg.png" />
+        <Resource Include="Resources\D5\WMN\366_fg.png" />
+        <Resource Include="Resources\D5\WMN\367_bg.png" />
+        <Resource Include="Resources\D5\WMN\367_fg.png" />
+        <Resource Include="Resources\D5\WMN\368_bg.png" />
+        <Resource Include="Resources\D5\WMN\368_fg.png" />
+        <Resource Include="Resources\D5\WMN\369_bg.png" />
+        <Resource Include="Resources\D5\WMN\369_fg.png" />
+        <Resource Include="Resources\D5\WMN\37.png" />
+        <Resource Include="Resources\D5\WMN\370_bg.png" />
+        <Resource Include="Resources\D5\WMN\370_fg.png" />
+        <Resource Include="Resources\D5\WMN\371_bg.png" />
+        <Resource Include="Resources\D5\WMN\371_fg.png" />
+        <Resource Include="Resources\D5\WMN\372_bg.png" />
+        <Resource Include="Resources\D5\WMN\372_fg.png" />
+        <Resource Include="Resources\D5\WMN\373_bg.png" />
+        <Resource Include="Resources\D5\WMN\373_fg.png" />
+        <Resource Include="Resources\D5\WMN\374_bg.png" />
+        <Resource Include="Resources\D5\WMN\374_fg.png" />
+        <Resource Include="Resources\D5\WMN\375_bg.png" />
+        <Resource Include="Resources\D5\WMN\375_fg.png" />
+        <Resource Include="Resources\D5\WMN\376_bg.png" />
+        <Resource Include="Resources\D5\WMN\376_fg.png" />
+        <Resource Include="Resources\D5\WMN\377_bg.png" />
+        <Resource Include="Resources\D5\WMN\377_fg.png" />
+        <Resource Include="Resources\D5\WMN\378_bg.png" />
+        <Resource Include="Resources\D5\WMN\378_fg.png" />
+        <Resource Include="Resources\D5\WMN\379_bg.png" />
+        <Resource Include="Resources\D5\WMN\379_fg.png" />
+        <Resource Include="Resources\D5\WMN\38.png" />
+        <Resource Include="Resources\D5\WMN\380_bg.png" />
+        <Resource Include="Resources\D5\WMN\380_fg.png" />
+        <Resource Include="Resources\D5\WMN\381_bg.png" />
+        <Resource Include="Resources\D5\WMN\381_fg.png" />
+        <Resource Include="Resources\D5\WMN\382_bg.png" />
+        <Resource Include="Resources\D5\WMN\382_fg.png" />
+        <Resource Include="Resources\D5\WMN\383_bg.png" />
+        <Resource Include="Resources\D5\WMN\383_fg.png" />
+        <Resource Include="Resources\D5\WMN\384_bg.png" />
+        <Resource Include="Resources\D5\WMN\384_fg.png" />
+        <Resource Include="Resources\D5\WMN\385_bg.png" />
+        <Resource Include="Resources\D5\WMN\385_fg.png" />
+        <Resource Include="Resources\D5\WMN\386_bg.png" />
+        <Resource Include="Resources\D5\WMN\386_fg.png" />
+        <Resource Include="Resources\D5\WMN\387_bg.png" />
+        <Resource Include="Resources\D5\WMN\387_fg.png" />
+        <Resource Include="Resources\D5\WMN\388_bg.png" />
+        <Resource Include="Resources\D5\WMN\388_fg.png" />
+        <Resource Include="Resources\D5\WMN\39.png" />
+        <Resource Include="Resources\D5\WMN\4.png" />
+        <Resource Include="Resources\D5\WMN\40.png" />
+        <Resource Include="Resources\D5\WMN\41.png" />
+        <Resource Include="Resources\D5\WMN\42.png" />
+        <Resource Include="Resources\D5\WMN\43.png" />
+        <Resource Include="Resources\D5\WMN\44.png" />
+        <Resource Include="Resources\D5\WMN\45.png" />
+        <Resource Include="Resources\D5\WMN\46.png" />
+        <Resource Include="Resources\D5\WMN\47.png" />
+        <Resource Include="Resources\D5\WMN\48.png" />
+        <Resource Include="Resources\D5\WMN\49.png" />
+        <Resource Include="Resources\D5\WMN\5.png" />
+        <Resource Include="Resources\D5\WMN\50.png" />
+        <Resource Include="Resources\D5\WMN\51.png" />
+        <Resource Include="Resources\D5\WMN\52.png" />
+        <Resource Include="Resources\D5\WMN\53.png" />
+        <Resource Include="Resources\D5\WMN\54.png" />
+        <Resource Include="Resources\D5\WMN\55.png" />
+        <Resource Include="Resources\D5\WMN\56.png" />
+        <Resource Include="Resources\D5\WMN\57.png" />
+        <Resource Include="Resources\D5\WMN\58.png" />
+        <Resource Include="Resources\D5\WMN\59.png" />
+        <Resource Include="Resources\D5\WMN\6.png" />
+        <Resource Include="Resources\D5\WMN\60.png" />
+        <Resource Include="Resources\D5\WMN\61.png" />
+        <Resource Include="Resources\D5\WMN\62.png" />
+        <Resource Include="Resources\D5\WMN\63.png" />
+        <Resource Include="Resources\D5\WMN\64.png" />
+        <Resource Include="Resources\D5\WMN\65.png" />
+        <Resource Include="Resources\D5\WMN\66.png" />
+        <Resource Include="Resources\D5\WMN\67.png" />
+        <Resource Include="Resources\D5\WMN\68.png" />
+        <Resource Include="Resources\D5\WMN\69.png" />
+        <Resource Include="Resources\D5\WMN\7.png" />
+        <Resource Include="Resources\D5\WMN\70.png" />
+        <Resource Include="Resources\D5\WMN\71.png" />
+        <Resource Include="Resources\D5\WMN\72.png" />
+        <Resource Include="Resources\D5\WMN\73.png" />
+        <Resource Include="Resources\D5\WMN\74.png" />
+        <Resource Include="Resources\D5\WMN\75.png" />
+        <Resource Include="Resources\D5\WMN\76.png" />
+        <Resource Include="Resources\D5\WMN\77.png" />
+        <Resource Include="Resources\D5\WMN\78.png" />
+        <Resource Include="Resources\D5\WMN\79.png" />
+        <Resource Include="Resources\D5\WMN\8.png" />
+        <Resource Include="Resources\D5\WMN\80.png" />
+        <Resource Include="Resources\D5\WMN\81.png" />
+        <Resource Include="Resources\D5\WMN\82.png" />
+        <Resource Include="Resources\D5\WMN\83.png" />
+        <Resource Include="Resources\D5\WMN\84.png" />
+        <Resource Include="Resources\D5\WMN\85.png" />
+        <Resource Include="Resources\D5\WMN\86.png" />
+        <Resource Include="Resources\D5\WMN\87.png" />
+        <Resource Include="Resources\D5\WMN\88.png" />
+        <Resource Include="Resources\D5\WMN\89.png" />
+        <Resource Include="Resources\D5\WMN\9.png" />
+        <Resource Include="Resources\D5\WMN\90.png" />
+        <Resource Include="Resources\D5\WMN\91.png" />
+        <Resource Include="Resources\D5\WMN\92.png" />
+        <Resource Include="Resources\D5\WMN\93.png" />
+        <Resource Include="Resources\D5\WMN\94.png" />
+        <Resource Include="Resources\D5\WMN\95.png" />
+        <Resource Include="Resources\D5\WMN\96.png" />
+        <Resource Include="Resources\D5\WMN\97.png" />
+        <Resource Include="Resources\D5\WMN\98.png" />
+        <Resource Include="Resources\D5\WMN\99.png" />
+        <Resource Include="D5_Buddy_Icon.ico" />
+        <Content Include="Readme.txt">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+        <PackageReference Include="System.ComponentModel.Composition" Version="7.0.0" />
+        <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+        <PackageReference Include="Microsoft.NETCore.Platforms" Version="6.0.10" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="6.0.1" />
+        <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="MaterialDesignColors" Version="2.1.4" />
+        <PackageReference Include="MaterialDesignExtensions" Version="3.3.0" />
+        <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
+        <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+        <PackageReference Include="System.Runtime.Handles" Version="4.3.0" />
+        <PackageReference Include="System.Text.Encoding" Version="4.3.0" />
+        <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
+    </ItemGroup>
+    <PropertyGroup />
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <DebugType>full</DebugType>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <DebugType>full</DebugType>
+    </PropertyGroup>
 </Project>

@@ -1,14 +1,15 @@
 ﻿D5 Buddy
 A Arcade Stage 5 Card Editor
 By PockyWitch
-Version 0.5 Hotfix1 BETA
+Version 0.8 BETA
 
 Features:
 - Change Name, Rank, DPoints.
 - Change all 3 cars, their colors and get them up to fulltune (MT, AT) or last step tune (for cars that have multiple engine options!)
+- Avatar Editing (Without BGs, because D5 EXP 2.0 does not seem to support it);
 
-Coming Soon (TM):
-- Avatar Editing
+Changelog 0.8 BETA:
+- Added an avatar editor, finally. :)
 
 Changelog 0.5 Hotfix:
 - Fix Selected Car List filling up when repeatedly loading cards

@@ -1,9 +1,9 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "D5_Buddy", "D5_Buddy\D5_Buddy.csproj", "{B6A9CF1F-044E-4DE5-86AA-7D2484E8F294}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "D5_Buddy", "D5_Buddy\D5_Buddy.csproj", "{B6A9CF1F-044E-4DE5-86AA-7D2484E8F294}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
