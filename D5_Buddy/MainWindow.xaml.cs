@@ -304,7 +304,6 @@ namespace D5_Buddy
 
         private void FilterPart(int partID)
         {
-            //var part = new ObservableCollection<IDZ_Avatar_Part>();
             var partCategory = 0;
             if (partID == 0)
             {
@@ -356,8 +355,6 @@ namespace D5_Buddy
         private void LoadCard_Button_Click(object sender, RoutedEventArgs e)
         {
             UnloadCard();
-
-
             CardLoading = true;
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "D5 Card Files (*.crd)|*.crd|All files (*.*)|*.*";
